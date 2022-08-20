@@ -24,10 +24,13 @@ if __name__ == "__main__":
     args.weights = os.path.join("runs", f"run_{args.run}", "best.pt")
 
     opts = load(open(args.config, "r"), Loader=Loader)
-    opts = opts | vars(args)
-
-    model = torchvision.models.segmentation.fcn_resnet50(num_classes=opts["num_classes"])
-
+    try:
+        opts = opts | vars(args)
+    except Exception as e:
+        opts = {**opts, **vars(args)}
+    
+    model = torchvision.models.segmentation.fcn_resnet50(pretrained=False, aux_loss=True)
+    
     model.load_state_dict(torch.load(opts["weights"]))
 
     submissionfolder = "submission"

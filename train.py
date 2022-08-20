@@ -9,7 +9,6 @@ from tabulate import tabulate
 
 import argparse
 import time
-import math
 
 from dataloader import create_dataloader
 from utils import create_run_dir, store_model_weights, record_scores
@@ -37,8 +36,11 @@ def test(opts, dataloader, model, lossfn):
         loss = lossfn(output, label).item()
 
         output = torch.argmax(torch.softmax(output, dim=1), dim=1)
-        metrics = calculate_score(output.detach().numpy().astype(np.uint8), label.detach().numpy().astype(np.uint8))
-
+        if device != "cpu":
+            metrics = calculate_score(output.detach().cpu().numpy().astype(np.uint8), label.detach().cpu().numpy().astype(np.uint8))
+        else:
+            metrics = calculate_score(output.detach().numpy().astype(np.uint8), label.detach().numpy().astype(np.uint8))
+            
         losstotal[idx] = loss
         ioutotal[idx] = metrics["iou"]
         bioutotal[idx] = metrics["biou"]
@@ -54,8 +56,11 @@ def test(opts, dataloader, model, lossfn):
 def train(opts):
 
     device = opts["device"]
-
-    model = torchvision.models.segmentation.fcn_resnet50(num_classes=opts["num_classes"], backbone_weights=torchvision.models.ResNet50_Weights.IMAGENET1K_V1)
+    
+    try:
+        model = torchvision.models.segmentation.fcn_resnet50(num_classes=opts["num_classes"], backbone_weights=torchvision.models.ResNet50_Weights.IMAGENET1K_V1)
+    except Exception as e:
+        model = torchvision.models.segmentation.fcn_resnet50(pretrained=True)
     model.to(device)
     model = model.float()
 
@@ -64,10 +69,10 @@ def train(opts):
 
     epochs = opts["epochs"]
 
-    trainloader = create_dataloader(opts, "test")
+    trainloader = create_dataloader(opts, "train")
     valloader = create_dataloader(opts, "val")
 
-    bestscore = math.inf
+    bestscore = 0
 
     for e in range(epochs):
 
@@ -95,8 +100,11 @@ def train(opts):
 
             lossitem = loss.item()
             output = torch.argmax(torch.softmax(output, dim=1), dim=1)
-            trainmetrics = calculate_score(output.detach().numpy().astype(np.uint8), label.detach().numpy().astype(np.uint8))
-
+            if device != "cpu":
+                trainmetrics = calculate_score(output.detach().cpu().numpy().astype(np.uint8), label.detach().cpu().numpy().astype(np.uint8))
+            else:
+                trainmetrics = calculate_score(output.detach().numpy().astype(np.uint8), label.detach().numpy().astype(np.uint8))
+            
             losstotal[idx] = lossitem
             ioutotal[idx] = trainmetrics["iou"]
             bioutotal[idx] = trainmetrics["biou"]
@@ -108,7 +116,7 @@ def train(opts):
         trainbiou = round(bioutotal.mean(), 4)
         trainscore = round(scoretotal.mean(), 4)
 
-        if testscore < bestscore:
+        if testscore > bestscore:
             bestscore = testscore
             store_model_weights(opts, model, "best")
         else:
@@ -148,7 +156,10 @@ if __name__ == "__main__":
     opts = load(open(args.config, "r"), Loader)
 
     # Combine args and opts in single dict
-    opts = opts | vars(args)
+    try:
+        opts = opts | vars(args)
+    except Exception as e:
+        opts = {**opts, **vars(args)}
 
     print("Opts:", opts)
 

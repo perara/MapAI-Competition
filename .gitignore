@@ -130,3 +130,5 @@ dmypy.json
 
 *.pt
 data/
+runs/
+massachusetts.zip
