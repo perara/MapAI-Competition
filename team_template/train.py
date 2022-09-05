@@ -147,7 +147,7 @@ if __name__ == "__main__":
 
     parser.add_argument("--epochs", type=int, default=10, help="Number of epochs for training")
     parser.add_argument("--lr", type=float, default=1e-3, help="Learning rate used during training")
-    parser.add_argument("--config", type=str, default="config/massachusetts.yaml", help="Configuration file to be used")
+    parser.add_argument("--config", type=str, default="config/data.yaml", help="Configuration file to be used")
     parser.add_argument("--device", type=str, default="cpu")
 
     args = parser.parse_args()

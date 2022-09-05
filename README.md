@@ -1,64 +1,33 @@
-# MapAI Compeition Template
+# MapAI Competition
 
-This is a general template for the MapAI Competition and provides the 
-users with a basic project using a FCN network backed by a pretrained backbone. 
-There is also a simple submission python file displaying the structure of the 
-required submission format and a suggested way of doing it.
+This is the official repository for the MapAI competition arranged by The Norwegian Mapping Authority, University of Agder (UiA),
+Norwegian Artificial Intelligence Research Consortium (NORA), Mechatronics Innovation Lab (MIL), and Norkart.
 
-Currently, the repository only supports aerial image segmentation. This will be expanded
-to enable the use of laser data in combination with aerial images.
+## Instructions
 
-## Data Folder Structure
+The competition will be arranged on Github. The steps for participation is as following:
 
-```bash
-data
-|--images
-   |--train
-      |--xyz.tif
-   |--test
-      |--xyz.tif
-   |--val
-      |--xyz.tif
-|--lidar
-   |--train
-      |--xyz.tif
-   |--test
-      |--xyz.tif
-   |--val
-      |--xyz.tif
-|--points
-   |--train
-      |--xyz.laz
-   |--test
-      |--xyz.laz
-   |--val
-      |--xyz.laz
-|--masks
-   |--train
-      |--xyz.tif
-   |--val
-      |--xyz.tif
+1. Fork the repository (Will noe be possible to make the repository private)
+2. Create a new private repository
+3. For the forked repository add a new remote by running the following command:
+   - > git add remote origin1 origin2
+4. When delivering push all changes to the forked repository (origin1/2)
+5. Go to github.com and create a pull request to the base repo
 
-```
+When the deadline is finished, we will evaluate all of your code on the hidden test-dataset and publish the results
+on a github page.
 
-## Note
+NB: It is important that the submission is formatted correctly and is the correct resolution.
 
-The dataset used in this template resizes the images from 1500x1500 down to 512x512. 
-Resizing an image to a smaller format should be avoided as it reduces the amount of 
-information available in the image - thus it might reduce the performance of the model.
-A better approach would be to divide the image into tiles of smaller size, e.g. 9 tiles à 500x500.
+## Evaluation
 
-The template does not implement data augmentation, which most likely would increase the performance
-of the model. This is especially true if the dataset is small.
+We will evaluate each of the tasks in each submission using Github Actions, which requires that the submissions
+are formatted correctly and outputs files with the correct name, type, and resolution.
 
-The template comes with a preset configuration for the train, val, and test data splits. You are
-perfectly allowed to change the train and val split as you like, but the test split must be
-unaltered.
+## Example
 
-The point folder contains raw output from the lidar in a .laz file. You can read more about the
-file format and discover a python package for reading and writing at
-> https://pylas.readthedocs.io/en/latest/
+We provide you with an example project called team_template. The team_template contains example code for training and submission
+and show you what we expect the outcome to be. 
 
-## Coming Soon
-
-- Support for laser data + aerial image segmentation.
+We will also provide you with tests that will check certain conditions about your current
+submission format and state. The test will use a small test-set to verify the correctness of the delivery.
