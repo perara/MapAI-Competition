@@ -43,21 +43,20 @@ data
 
 ## Note
 
-The dataset used in this template resizes the images from 1500x1500 down to 512x512. 
+The dataset used in this template resizes the images from 5000x5000 down to 512x512. 
 Resizing an image to a smaller format should be avoided as it reduces the amount of 
 information available in the image - thus it might reduce the performance of the model.
-A better approach would be to divide the image into tiles of smaller size, e.g. 9 tiles à 500x500.
+A better approach would be to divide the image into tiles of smaller size, e.g. 100 tiles à 500x500.
 
 The template does not implement data augmentation, which most likely would increase the performance
 of the model. This is especially true if the dataset is small.
 
 The template comes with a preset configuration for the train, val, and test data splits. You are
-perfectly allowed to change the train and val split as you like, but the test split must be
+perfectly allowed to change the train and val split as you like, but the test split should be
 unaltered.
 
 The point folder contains raw output from the lidar in a .laz file. You can read more about the
-file format and discover a python package for reading and writing at
-> https://pylas.readthedocs.io/en/latest/
+file format and discover a python package for reading and writing [here](https://pylas.readthedocs.io/en/latest/).
 
 ## Coming Soon
 

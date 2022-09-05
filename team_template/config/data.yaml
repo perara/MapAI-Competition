@@ -11,22 +11,22 @@ class_to_color:
 imagesize: 512
 
 train:
-  imagefolder: "data/images/train"
-  labelfolder: "data/masks/train"
-  lidarfolder: "data/lidar/train"
-  pointfolder: "data/point/train"
+  imagefolder: "../data/images/train"
+  labelfolder: "../data/masks/train"
+  lidarfolder: "../data/lidar/train"
+  pointfolder: "../data/point/train"
   batchsize: 8
   shuffle: True
 val:
-  imagefolder: "data/images/val"
-  labelfolder: "data/images/val"
-  lidarfolder: "data/lidar/val"
-  pointfolder: "data/point/val"
+  imagefolder: "../data/images/val"
+  labelfolder: "../data/masks/val"
+  lidarfolder: "../data/lidar/val"
+  pointfolder: "../data/point/val"
   batchsize: 1
   shuffle: False
 test:
-  imagefolder: "data/images/test"
-  lidarfolder: "data/lidar/test"
-  pointfolder: "data/point/test"
+  imagefolder: "../data/images/test"
+  lidarfolder: "../data/lidar/test"
+  pointfolder: "../data/point/test"
   batchsize: 1
   shuffle: False

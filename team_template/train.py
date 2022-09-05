@@ -56,11 +56,19 @@ def test(opts, dataloader, model, lossfn):
 def train(opts):
 
     device = opts["device"]
-    
+
     try:
-        model = torchvision.models.segmentation.fcn_resnet50(num_classes=opts["num_classes"], backbone_weights=torchvision.models.ResNet50_Weights.IMAGENET1K_V1)
+        model = torchvision.models.segmentation.fcn_resnet50(num_classes=opts["num_classes"],
+                                                             backbone_weights=torchvision.models.ResNet50_Weights.IMAGENET1K_V1)
     except Exception as e:
         model = torchvision.models.segmentation.fcn_resnet50(pretrained=True)
+
+    if opts["task"] == 2:
+        # Adds 4 channels to the input layer instead of 3
+        model = torchvision.models.segmentation.fcn_resnet50(pretrained=True)
+        new_conv1 = torch.nn.Conv2d(4, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+        model.backbone.conv1 = new_conv1
+
     model.to(device)
     model = model.float()
 
@@ -69,8 +77,8 @@ def train(opts):
 
     epochs = opts["epochs"]
 
-    trainloader = create_dataloader(opts, "train")
-    valloader = create_dataloader(opts, "val")
+    trainloader = create_dataloader(opts, "train", task=opts["task"])
+    valloader = create_dataloader(opts, "val", task=opts["task"])
 
     bestscore = 0
 
@@ -149,6 +157,7 @@ if __name__ == "__main__":
     parser.add_argument("--lr", type=float, default=1e-3, help="Learning rate used during training")
     parser.add_argument("--config", type=str, default="config/data.yaml", help="Configuration file to be used")
     parser.add_argument("--device", type=str, default="cpu")
+    parser.add_argument("--task", type=int, default=1)
 
     args = parser.parse_args()
 

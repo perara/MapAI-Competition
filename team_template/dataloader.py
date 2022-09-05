@@ -7,7 +7,7 @@ import cv2 as cv
 
 from yaml import load, dump, Loader, Dumper
 
-from datautils import get_paths_from_folder, load_image, load_label
+from datautils import get_paths_from_folder, load_image, load_label, load_lidar
 
 class ImageAndLabelDataset(Dataset):
 
@@ -74,14 +74,15 @@ class ImageLabelAndLidarDataset(Dataset):
 
         image = load_image(imagefilepath, (self.opts["imagesize"], self.opts["imagesize"]))
         label = load_label(labelfilepath, (self.opts["imagesize"], self.opts["imagesize"]))
-        lidar = load_label(lidarfilepath, (self.opts["imagesize"], self.opts["imagesize"]))
-
-        print("lidar:", lidar)
-
-        exit()
+        lidar = load_lidar(lidarfilepath, (self.opts["imagesize"], self.opts["imagesize"]))
 
         assert image.shape[1:] == label.shape[:2], f"image and label shape not the same; {image.shape[1:]} != {label.shape[:2]}"
         assert image.shape[1:] == lidar.shape[:2], f"image and label shape not the same; {image.shape[1:]} != {label.shape[:2]}"
+
+        # Concatenate lidar and image data
+        lidar = lidar.unsqueeze(0)
+
+        image = torch.cat((image, lidar), dim=0)
 
         return image, label, filename
 
@@ -110,8 +111,12 @@ class TestDataset(Dataset):
         return image, filename
 
 
-def create_dataloader(opts: dict, datatype: str = "test") -> DataLoader:
-    dataset = ImageAndLabelDataset(opts, datatype)
+def create_dataloader(opts: dict, datatype: str = "test", task = 1) -> DataLoader:
+
+    if task == 1:
+        dataset = ImageAndLabelDataset(opts, datatype)
+    elif task == 2:
+        dataset = ImageLabelAndLidarDataset(opts, datatype)
 
     dataloader = DataLoader(dataset, batch_size=opts[datatype]["batchsize"], shuffle=opts[datatype]["shuffle"])
 

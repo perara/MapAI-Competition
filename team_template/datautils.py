@@ -41,3 +41,11 @@ def load_label(labelpath: str, size: tuple) -> torch.tensor:
     label = torch.tensor(label.astype(np.uint8)).long()
 
     return label
+
+def load_lidar(lidarpath: str, size: tuple) -> torch.tensor:
+    lidar = cv.imread(lidarpath, cv.IMREAD_UNCHANGED)
+    lidar = cv.resize(lidar, size)
+
+    lidar = torch.tensor(lidar.astype(np.float)).float()
+
+    return lidar
