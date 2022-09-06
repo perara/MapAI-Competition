@@ -58,9 +58,13 @@ unaltered.
 The point folder contains raw output from the lidar in a .laz file. You can read more about the
 file format and discover a python package for reading and writing [here](https://pylas.readthedocs.io/en/latest/).
 
-## Coming Soon
+## Training
 
-- Support for laser data + aerial image segmentation.
+Training a model for task 1
+> python3 train.py --task 1
+
+Training a model for task 2
+> python3 train.py --task 2
 
 ## Team info (Fill in the blank fields):
 
