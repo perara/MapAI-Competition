@@ -1,4 +1,4 @@
-# MapAI Competition
+# MapAI Competition!!!!!!
 
 This is the official repository for the MapAI competition arranged by The Norwegian Mapping Authority, University of Agder (UiA),
 Norwegian Artificial Intelligence Research Consortium (NORA), Mechatronics Innovation Lab (MIL), and Norkart.
