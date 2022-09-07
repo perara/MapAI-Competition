@@ -5,8 +5,10 @@ def create_run_dir(opts):
 
     rundir = "runs"
 
+    rundir = os.path.join(rundir, "task_" + str(opts["task"]))
+
     if not os.path.exists(rundir):
-        os.mkdir(rundir)
+        os.makedirs(rundir, exist_ok=True)
 
     existing_folders = os.listdir(rundir)
 

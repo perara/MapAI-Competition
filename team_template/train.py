@@ -77,8 +77,8 @@ def train(opts):
 
     epochs = opts["epochs"]
 
-    trainloader = create_dataloader(opts, "train", task=opts["task"])
-    valloader = create_dataloader(opts, "val", task=opts["task"])
+    trainloader = create_dataloader(opts, "train")
+    valloader = create_dataloader(opts, "val")
 
     bestscore = 0
 

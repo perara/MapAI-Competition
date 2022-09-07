@@ -111,11 +111,11 @@ class TestDataset(Dataset):
         return image, filename
 
 
-def create_dataloader(opts: dict, datatype: str = "test", task = 1) -> DataLoader:
+def create_dataloader(opts: dict, datatype: str = "test") -> DataLoader:
 
-    if task == 1:
+    if opts["task"] == 1:
         dataset = ImageAndLabelDataset(opts, datatype)
-    elif task == 2:
+    elif opts["task"] == 2:
         dataset = ImageLabelAndLidarDataset(opts, datatype)
 
     dataloader = DataLoader(dataset, batch_size=opts[datatype]["batchsize"], shuffle=opts[datatype]["shuffle"])

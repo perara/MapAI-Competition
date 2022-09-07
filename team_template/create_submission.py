@@ -2,11 +2,13 @@ import argparse
 
 import torch
 import torchvision
+import numpy as np
 import cv2 as cv
 
 from yaml import load, Loader, dump, Dumper
-from dataloader import create_testloader
+from dataloader import create_dataloader
 from tqdm import tqdm
+from eval_functions import iou, biou
 
 import os
 import shutil
@@ -15,23 +17,29 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--run", type=str, default="0", help="Which run number that should be used for inference")
-    parser.add_argument("--config", type=str, default="config/massachusetts.yaml", help="Config")
+    parser.add_argument("--config", type=str, default="config/data.yaml", help="Config")
     parser.add_argument("--task", type=int, default=1, help="Which task you are submitting for")
     parser.add_argument("--device", type=str, default="cpu", help="Which device the inference should run on")
+    parser.add_argument("--weights", type=str, help="Path to weights for the specific model and task")
+    parser.add_argument("--test_data", type=str, help="Path to test data")
 
     args = parser.parse_args()
-    args.weights = os.path.join("runs", f"run_{args.run}", "best.pt")
 
     opts = load(open(args.config, "r"), Loader=Loader)
     try:
         opts = opts | vars(args)
     except Exception as e:
         opts = {**opts, **vars(args)}
-    
-    model = torchvision.models.segmentation.fcn_resnet50(pretrained=False, aux_loss=True)
-    
-    model.load_state_dict(torch.load(opts["weights"]))
+
+    if opts["task"] == 1:
+        model = torchvision.models.segmentation.fcn_resnet50(pretrained=False, aux_loss=True)
+    else:
+        # Adds 4 channels to the input layer instead of 3
+        model = torchvision.models.segmentation.fcn_resnet50(pretrained=False)
+        new_conv1 = torch.nn.Conv2d(4, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+        model.backbone.conv1 = new_conv1
+
+    #model.load_state_dict(torch.load(opts["weights"]))
 
     submissionfolder = "submission"
 
@@ -50,7 +58,7 @@ if __name__ == "__main__":
 
     os.mkdir(taskfolder)
 
-    testloader = create_testloader(opts, "test")
+    testloader = create_dataloader(opts, "val")
 
     predictionfolder = os.path.join(taskfolder, "predictions")
 
@@ -61,12 +69,24 @@ if __name__ == "__main__":
     model = model.to(device)
 
     for idx, batch in tqdm(enumerate(testloader), total=len(testloader), desc="Inference"):
-        image, filename = batch
-        filename = filename[0]
+        image, label, filename = batch
         image = image.to(device)
+        label = label.to(device)
+
+        filename = filename[0]
 
         prediction = model(image)["out"]
         prediction = torch.argmax(torch.softmax(prediction, dim=1), dim=1).squeeze().detach().numpy()
+
+        label = label.squeeze().detach().numpy()
+
+        prediction = np.uint8(prediction)
+        label = np.uint8(label)
+
+        iou_score = iou(prediction, label)
+        biou_score = biou(label, prediction)
+
+        print("iou_score:", iou_score, "biou_score:", biou_score)
 
         filepath = os.path.join(predictionfolder, filename)
 
