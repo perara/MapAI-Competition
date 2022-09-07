@@ -10,7 +10,7 @@ The competition will be arranged on Github. The steps for participation is as fo
 1. Fork the repository (Will noe be possible to make the repository private)
 2. Create a new private repository
 3. For the forked repository add a new remote by running the following command:
-   - > git add remote origin1 origin2
+   - > git remote add private_remote github_link_to_private_repository
 4. When delivering push all changes to the forked repository (origin1/2)
 5. Go to github.com and create a pull request to the base repo
 
