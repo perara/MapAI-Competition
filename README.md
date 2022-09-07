@@ -7,12 +7,15 @@ Norwegian Artificial Intelligence Research Consortium (NORA), Mechatronics Innov
 
 The competition will be arranged on Github. The steps for participation is as following:
 
-1. Fork the repository (Will noe be possible to make the repository private)
-2. Create a new private repository
-3. For the forked repository add a new remote by running the following command:
-   - > git remote add private_remote github_link_to_private_repository
-4. When delivering push all changes to the forked repository (origin1/2)
-5. Go to github.com and create a pull request to the base repo
+1. Fork this repository
+2. `git clone git@github.com:perara/MapAI-Competition.git -o submission `
+3. Create new repository on Github. This repository can be private.
+4. Enter the MapAI-Competition folder
+5. `git remote add origin git@github.com:uiaikt/map-ai-submission-test.git`
+6. Create Model for the competition and use git as you would normally.
+7. Before deadline:
+   * `git push submission`
+   * Create pull request
 
 When the deadline is finished, we will evaluate all of your code on the hidden test-dataset and publish the results
 on a github page.
