@@ -33,12 +33,6 @@ jobs:
         with:
           # File containing the Python version to use. Example: .python-version
           python-version-file: .python-version
-  
-  evaluate:
-    
-    runs-on: ubuntu-latest
-    
-    steps:
     
       # Runs a single command using the runners shell
       - name: Run a one-line script
