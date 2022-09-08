@@ -43,7 +43,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Evaluation
         run: |
-          cp ./data/evaluation.py team_template/.
+          cp data/evaluation.py team_template/.
           cd team_template
           pip3 install -r requirements.txt
           python3 evaluate_task_1.py --data_percentage 0.01
