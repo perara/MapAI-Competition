@@ -26,11 +26,8 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Checkout private data
-        uses: GuillaumeFalourd/clone-github-repo-action@v2
-        with:
-          owner: 'sjyhne'
-          repository: 'mapai_evaluation_data'
-          access-token: ${{ secrets.PAT_EVALUATION_DATA }}
+        run: |
+          git clone https://${{ secrets.PAT_EVALUATION_DATA }}@github.com/Sjyhne/mapai_evaluation_data.git
 
       - name: "What is in my repo"
         run: ls
