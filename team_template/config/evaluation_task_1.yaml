@@ -11,7 +11,7 @@ class_to_color:
 imagesize: 500
 
 test:
-  imagefolder: "../data/images/val"
-  labelfolder: "../data/masks/val"
+  imagefolder: "../data/images/test"
+  labelfolder: "../data/masks/test"
   batchsize: 1
   shuffle: False

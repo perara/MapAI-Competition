@@ -24,6 +24,16 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+
+      - name: Checkout private data
+        uses: actions/checkout@v3
+        with:
+          repository: Sjyhne/mapai_evaluation_data
+          token: ${{ secrets.PAT_EVALUATION_DATA }} # `GH_PAT` is a secret that contains your PAT
+          path: .
+
+      - name: "What is in my repo"
+        run: ls
       
       - name: "Print build finished"
         run: echo "Build finished"
@@ -33,13 +43,9 @@ jobs:
         with:
           # File containing the Python version to use. Example: .python-version
           python-version-file: .python-version
-    
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Evaluation started!
 
       # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Evaluation
         run: |
           cd team_template
           pip3 install -r requirements.txt
