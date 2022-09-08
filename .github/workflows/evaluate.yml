@@ -47,5 +47,5 @@ jobs:
           cd team_template
           pip3 install -r requirements.txt
           python3 evaluate_task_1.py --data_percentage 0.01
-          python3 evaluation.py
+          python3 evaluation.py --data_percentage 0.01
           echo Finished evaluation, exiting
