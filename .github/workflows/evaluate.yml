@@ -39,7 +39,7 @@ jobs:
       - name: Evaluation
         run: |
           for d in */ ; do
-            if [ "$d" != "team_temp" && "$d" != "data" ]; then
+            if [ "participant" == *"$d" ]; then
               cp data/evaluation.py "$d"/.
               cd $d
               pip3 install -r requirements.txt
