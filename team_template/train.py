@@ -158,6 +158,7 @@ if __name__ == "__main__":
     parser.add_argument("--config", type=str, default="config/data.yaml", help="Configuration file to be used")
     parser.add_argument("--device", type=str, default="cpu")
     parser.add_argument("--task", type=int, default=1)
+    parser.add_argument("--data_percentage", type=float, default=1.0, help="Percentage of the whole dataset that is used")
 
     args = parser.parse_args()
 

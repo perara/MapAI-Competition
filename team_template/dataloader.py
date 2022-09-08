@@ -20,6 +20,12 @@ class ImageAndLabelDataset(Dataset):
         self.imagepaths = get_paths_from_folder(opts[datatype]["imagefolder"])
         self.labelpaths = get_paths_from_folder(opts[datatype]["labelfolder"])
 
+        print()
+
+        if self.opts["data_percentage"] != 1.0:
+            self.imagepaths = self.imagepaths[:int(len(self.imagepaths) * self.opts["data_percentage"])]
+            self.labelpaths = self.labelpaths[:int(len(self.labelpaths) * self.opts["data_percentage"])]
+
         assert len(self.imagepaths) == len(self.labelpaths), f"Length of imagepaths does not match length of labelpaths; {len(self.imagepaths)} != {len(self.labelpaths)}"
 
         print(f"Number of images in {datatype}dataset: {len(self)}")
@@ -53,6 +59,11 @@ class ImageLabelAndLidarDataset(Dataset):
         self.imagepaths = get_paths_from_folder(opts[datatype]["imagefolder"])
         self.labelpaths = get_paths_from_folder(opts[datatype]["labelfolder"])
         self.lidarpaths = get_paths_from_folder(opts[datatype]["lidarfolder"])
+
+        if opts["data_percentage"] != 1.0:
+            self.imagepaths = self.imagepaths[:int(len(self.imagepaths) * opts["data_percentage"]):]
+            self.labelpaths = self.labelpaths[:int(len(self.labelpaths) * opts["data_percentage"]):]
+            self.lidarpaths = self.lidarpaths[:int(len(self.lidarpaths) * opts["data_percentage"]):]
 
         assert len(self.imagepaths) == len(self.labelpaths), f"Length of imagepaths does not match length of labelpaths; {len(self.imagepaths)} != {len(self.labelpaths)}"
         assert len(self.imagepaths) == len(self.lidarpaths), f"Length of imagepaths does not match length of labelpaths; {len(self.imagepaths)} != {len(self.labelpaths)}"

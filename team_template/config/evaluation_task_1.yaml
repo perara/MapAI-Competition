@@ -10,15 +10,8 @@ class_to_color:
 
 imagesize: 500
 
-train:
-  imagefolder: "../data/images/train"
-  labelfolder: "../data/masks/train"
-  lidarfolder: "../data/lidar/train"
-  batchsize: 8
-  shuffle: True
-val:
+test:
   imagefolder: "../data/images/val"
   labelfolder: "../data/masks/val"
-  lidarfolder: "../data/lidar/val"
   batchsize: 1
   shuffle: False

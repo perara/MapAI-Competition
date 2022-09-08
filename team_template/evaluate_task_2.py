@@ -17,11 +17,13 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--config", type=str, default="config/data.yaml", help="Config")
-    parser.add_argument("--task", type=int, default=1, help="Which task you are submitting for")
+    parser.add_argument("--config", type=str, default="config/evaluation_task_2.yaml", help="Config")
+    parser.add_argument("--task", type=int, default=2, help="Which task you are submitting for")
     parser.add_argument("--device", type=str, default="cpu", help="Which device the inference should run on")
     parser.add_argument("--weights", type=str, help="Path to weights for the specific model and task")
     parser.add_argument("--test_data", type=str, help="Path to test data")
+    parser.add_argument("--data_percentage", type=float, default=1.0, help="Percentage of the whole dataset that is used")
+
 
     args = parser.parse_args()
 
@@ -31,14 +33,12 @@ if __name__ == "__main__":
     except Exception as e:
         opts = {**opts, **vars(args)}
 
-    if opts["task"] == 1:
-        model = torchvision.models.segmentation.fcn_resnet50(pretrained=False, aux_loss=True)
-    else:
-        # Adds 4 channels to the input layer instead of 3
-        model = torchvision.models.segmentation.fcn_resnet50(pretrained=False)
-        new_conv1 = torch.nn.Conv2d(4, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
-        model.backbone.conv1 = new_conv1
+    # Adds 4 channels to the input layer instead of 3
+    model = torchvision.models.segmentation.fcn_resnet50(pretrained=False, num_classes=opts["num_classes"])
+    new_conv1 = torch.nn.Conv2d(4, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
+    model.backbone.conv1 = new_conv1
 
+    # Commented just for testing purposes
     #model.load_state_dict(torch.load(opts["weights"]))
 
     submissionfolder = "submission"
@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
     os.mkdir(taskfolder)
 
-    testloader = create_dataloader(opts, "val")
+    testloader = create_dataloader(opts, "test")
 
     predictionfolder = os.path.join(taskfolder, "predictions")
 
@@ -67,6 +67,9 @@ if __name__ == "__main__":
     device = opts["device"]
 
     model = model.to(device)
+
+    iou_scores = np.ndarray((len(testloader)))
+    biou_scores = np.ndarray((len(testloader)))
 
     for idx, batch in tqdm(enumerate(testloader), total=len(testloader), desc="Inference"):
         image, label, filename = batch
@@ -86,7 +89,8 @@ if __name__ == "__main__":
         iou_score = iou(prediction, label)
         biou_score = biou(label, prediction)
 
-        print("iou_score:", iou_score, "biou_score:", biou_score)
+        iou_scores[idx] = np.round(iou_score, 6)
+        biou_scores[idx] = np.round(biou_score, 6)
 
         filepath = os.path.join(predictionfolder, filename)
 
@@ -95,6 +99,7 @@ if __name__ == "__main__":
 
         cv.imwrite(filepath, prediction)
 
+    print("iou_score:", np.round(iou_scores.mean(), 5), "biou_score:", np.round(biou_scores.mean(), 5))
 
     dump(opts, open(os.path.join(taskfolder, "opts.yaml"), "w"), Dumper=Dumper)
 
