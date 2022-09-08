@@ -30,11 +30,10 @@ jobs:
           git clone https://${{ secrets.PAT_EVALUATION_DATA }}@github.com/Sjyhne/mapai_evaluation_data.git data
 
       - name: "What is in my repo"
-        run: ls
-      
-      - name: "Print build finished"
-        run: echo "Build finished"
-      
+        run: |
+          ls
+          ls data
+
       - name: Setup Python
         uses: actions/setup-python@v4.2.0
         with:
@@ -44,9 +43,9 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Evaluation
         run: |
+          cp ./data/evaluation.py team_template/.
           cd team_template
           pip3 install -r requirements.txt
           python3 evaluate_task_1.py --data_percentage 0.01
-          cp ../data/evaluation.py .
           python3 evaluation.py
           echo Finished evaluation, exiting
