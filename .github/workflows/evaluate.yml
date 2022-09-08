@@ -26,11 +26,11 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Checkout private data
-        uses: actions/checkout@v3
+        uses: GuillaumeFalourd/clone-github-repo-action@v2
         with:
-          repository: Sjyhne/mapai_evaluation_data
-          token: ${{ secrets.PAT_EVALUATION_DATA }} # `GH_PAT` is a secret that contains your PAT
-          path: .
+          owner: 'sjyhne'
+          repository: 'mapai_evaluation_data'
+          access-token: ${{ secrets.PAT_EVALUATION_DATA }}
 
       - name: "What is in my repo"
         run: ls
