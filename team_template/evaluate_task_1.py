@@ -91,10 +91,13 @@ if __name__ == "__main__":
 
         filepath = os.path.join(predictionfolder, filename)
 
+        prediction_visual = np.copy(prediction)
+
         for idx, value in enumerate(opts["classes"]):
-            prediction[prediction == idx] = opts["class_to_color"][value]
+            prediction_visual[prediction_visual == idx] = opts["class_to_color"][value]
 
         cv.imwrite(filepath, prediction)
+        cv.imwrite(filepath.split(".")[0] + ".png", prediction_visual)
 
     print("iou_score:", np.round(iou_scores.mean(), 5), "biou_score:", np.round(biou_scores.mean(), 5))
 
