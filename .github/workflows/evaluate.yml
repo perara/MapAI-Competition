@@ -32,7 +32,7 @@ jobs:
         uses: actions/setup-python@v4.2.0
         with:
           # File containing the Python version to use. Example: .python-version
-          python-version-file: team_template/.python-version
+          python-version-file: .python-version
   
   evaluate:
     
