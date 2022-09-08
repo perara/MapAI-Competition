@@ -3,11 +3,11 @@ import cv2
 
 def iou(prediction: np.array, target: np.array) -> float:
 
-    if prediction.dtype != np.bool:
-        prediction = np.asarray(prediction, dtype=np.bool)
+    if prediction.dtype != bool:
+        prediction = np.asarray(prediction, dtype=bool)
 
-    if target.dtype != np.bool:
-        target = np.asarray(target, dtype=np.bool)
+    if target.dtype != bool:
+        target = np.asarray(target, dtype=bool)
 
     overlap = prediction * target # Logical AND
     union = prediction + target # Logical OR
