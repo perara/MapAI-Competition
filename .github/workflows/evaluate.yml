@@ -44,7 +44,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Evaluation
         run: |
-          if [ ${{ "github.actor" }} == "Sjyhne"]; then
+          if [ "${{ github.actor }}" == "Sjyhne"]; then
             for d in */ ; do
               if [ "participant" == *"$d" ]; then
                 cp data/evaluation.py "$d"/.
