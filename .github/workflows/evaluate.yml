@@ -25,7 +25,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: Checkout private data..
+      - name: "Checkout private repo with PAT"
         run: |
           git clone https://${{ secrets.PAT_EVALUATION_DATA }}@github.com/Sjyhne/mapai_evaluation_data.git
 
