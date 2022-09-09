@@ -39,9 +39,9 @@ jobs:
       - name: Check if pull request
         run: |
           if [ -z ${{ github.event.pullrequest }} ]; then
-            echo this is a pull request
+            echo this is not a pull request
           elif [ -z ${{ github.event.commit }} ]; then
-            echo this is a commit
+            echo this is not a commit
           fi
 
       - name: "Checkout private repo with PAT"
