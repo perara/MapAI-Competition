@@ -30,6 +30,7 @@ jobs:
 
       - name: "Checkout private repo with PAT"
         run: |
+          echo CLONING
           if [ "${{ github.actor }}" == "Sjyhne" ]; then
             echo PRIVATE CLONE
             git clone https://${{ secrets.PAT_EVALUATION_DATA }}@github.com/Sjyhne/mapai_evaluation_data.git data
