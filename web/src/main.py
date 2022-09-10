@@ -16,9 +16,9 @@ class Participant(BaseModel):
     error: str = None
 
 
-def get_competition_root():
+def get_competition_root(prefix: str):
     for p in base_dir.parents:
-        if not any([x for x in p.iterdir() if "participant_" in x.name]):
+        if not any([x for x in p.iterdir() if f"{prefix}_" in x.name]):
             continue
         return p
 
@@ -28,8 +28,8 @@ def property_exists(d: dict, key: str):
         raise ValueError(f"Key: '{key}' does not exist in dictionary.")
 
 
-def get_participants():
-    competition_root: pathlib.Path = get_competition_root()
+def get_participants(prefix: str):
+    competition_root: pathlib.Path = get_competition_root(prefix=prefix)
     participant_paths: list[pathlib.Path] = list(competition_root.glob("*participant_*"))
     participants = []
     for participant_path in participant_paths:
@@ -67,11 +67,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", default="build", type=str)
     parser.add_argument("--competition-title", default="competition_title", type=str)
+    parser.add_argument("--prefix", default="team", type=str)
     args = parser.parse_args()
 
-    participants = get_participants()
+    participants = get_participants(args.prefix)
 
-    environment = jinja2.Environment(loader=FileSystemLoader("templates/"))
+    environment = jinja2.Environment(loader=FileSystemLoader(base_dir.joinpath("templates/")))
     template = environment.get_template("index.html")
     render = template.render(participants=participants, competition_title=args.competition_title)
 
