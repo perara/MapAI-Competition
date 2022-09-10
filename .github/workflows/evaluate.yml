@@ -81,10 +81,19 @@ jobs:
                 echo have participant as substring - $d
                 cd $d
                 pip3 install -r requirements.txt
+                echo " "
+                echo -------------------
+                echo |Evaluating task 1|
+                echo -------------------
                 python3 evaluate_task_1.py --data_percentage 0.01 --dtype val
-                python3 evaluate_task_2.py --data_percentage 0.01 --dtype val
                 python3 evaluation.py --data_percentage 0.01 --dtype val --task 1
+                echo " "
+                echo -------------------
+                echo |Evaluating task 2|
+                echo -------------------
+                python3 evaluate_task_2.py --data_percentage 0.01 --dtype val
                 python3 evaluation.py --data_percentage 0.01 --dtype val --task 2
+                echo " "
                 echo Finished evaluation, exiting
                 cd ..
             done
