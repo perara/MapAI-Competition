@@ -36,7 +36,7 @@ def get_participants(prefix: str):
         try:
             participant_data = parse_participant(participant_path)
         except ValueError as e:
-            participant_data = dict(error=str(e))
+            participant_data = dict(error=str(e), name=participant_path.name)
 
         participants.append(Participant.parse_obj(participant_data))
     return participants
