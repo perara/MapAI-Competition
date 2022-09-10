@@ -65,8 +65,7 @@ jobs:
         run: |
           parstr = "participant"
           if [ -z ${{ github.event.pull_request }} ]; then
-            for d in */ ; do
-              if [[ $d == *"$parstr"* ]]; then
+            for d in participant_*/ ; do
                 cp data/evaluation.py "$d"/.
                 cd $d
                 pip3 install -r requirements.txt
@@ -76,13 +75,9 @@ jobs:
                 python3 evaluation.py --data_percentage 0.01 --dtype test --task 2
                 echo Finished evaluation, exiting
                 cd ..
-              else
-                echo "$d"
-              fi
             done
           else
-            for d in */ ; do
-              if [[ $d == *"$parstr"* ]]; then
+            for d in participant_*/ ; do
                 cp data/evaluation.py "$d"/.
                 echo have participant as substring - $d
                 cd $d
@@ -93,8 +88,5 @@ jobs:
                 python3 evaluation.py --data_percentage 0.01 --dtype val --task 2
                 echo Finished evaluation, exiting
                 cd ..
-              else
-                echo does not have participant in string "$d"
-              fi
             done
           fi
