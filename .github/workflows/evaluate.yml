@@ -81,7 +81,8 @@ jobs:
             done
           else
             for d in */ ; do
-              if [[ *"participant"* == $d ]]; then
+              parstr = "participant"
+              if [[ $d == *"$parstr"* ]]; then
                 cp data/evaluation.py "$d"/.
                 echo have participant as substring - $d
                 cd $d
