@@ -30,7 +30,7 @@ def property_exists(d: dict, key: str):
 
 def get_participants(prefix: str):
     competition_root: pathlib.Path = get_competition_root(prefix=prefix)
-    participant_paths: list[pathlib.Path] = list(competition_root.glob("*participant_*"))
+    participant_paths: list[pathlib.Path] = list(competition_root.glob(f"*{prefix}_*"))
     participants = []
     for participant_path in participant_paths:
         try:
