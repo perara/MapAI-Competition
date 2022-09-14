@@ -36,6 +36,7 @@ jobs:
             for d in team_*/ ; do
                 pip3 install $d
                 python3 -c "from huggingface_hub.hf_api import HfFolder; HfFolder.save_token('$ACCESS_TOKEN')"
+                read -t 5 -p "Waiting.."
                 cd $d/src
                 huggingface-cli login
                 python3 evaluate_task_1.py --data_percentage 0.01 --dtype task1
