@@ -26,16 +26,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Triggering actor
-        run: |
-          echo "${{ github.triggering_actor }}"
-          echo "${{ github.repository_owner }}"
-
       # Runs a set of commands using the runners shell
+      # If not field github.event.pull_request exists, then do first forloop
       - name: Evaluation
         run: |
           if [ -z ${{ github.event.pull_request }} ]; then
-            for d in participant_*/ ; do
+            for d in team_*/ ; do
                 cp data/evaluation.py "$d"/.
                 cd $d
                 pip3 install -r requirements.txt
@@ -51,21 +47,20 @@ jobs:
           else
             for d in team_*/ ; do
                 cp data/evaluation.py "$d"/.
-                echo have participant as substring - $d
                 cd $d
                 pip3 install -r requirements.txt
                 echo " "
                 echo -------------------
                 echo |Evaluating task 1|
                 echo -------------------
-                python3 evaluate_task_1.py --data_percentage 0.01 --dtype task1
-                python3 evaluation.py --data_percentage 0.01 --dtype task1 --task 1
+                python3 evaluate_task_1.py --data_percentage 0.01 --dtype validation
+                python3 evaluation.py --data_percentage 0.01 --dtype validation --task 1
                 echo " "
                 echo -------------------
                 echo |Evaluating task 2|
                 echo -------------------
-                python3 evaluate_task_2.py --data_percentage 0.01 --dtype task2
-                python3 evaluation.py --data_percentage 0.01 --dtype task2 --task 2
+                python3 evaluate_task_2.py --data_percentage 0.01 --dtype validation
+                python3 evaluation.py --data_percentage 0.01 --dtype validation --task 2
                 echo " "
                 echo Finished evaluation, exiting
                 cd ..
