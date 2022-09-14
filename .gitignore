@@ -134,5 +134,5 @@ data/val
 data/test
 data/task1_test
 data/task2_test
-*/runs
-*/submission
+submission/
+runs/
