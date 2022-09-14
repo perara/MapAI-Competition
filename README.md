@@ -22,6 +22,13 @@ on a github page.
 
 NB: It is important that the submission is formatted correctly and is the correct resolution.
 
+## Downloading data
+
+The training and validation data is stored in separate github repositories.
+Therefore, all you need to do is clone both repositories into a data folder
+located at the same level as your team folder. Further instructions can be
+found in the [readme](./data/README.md) in the data folder.
+
 ## Evaluation
 
 We will evaluate each of the tasks in each submission using Github Actions, which requires that the submissions
