@@ -32,7 +32,6 @@ jobs:
         run: |
           if [ -z ${{ github.event.pull_request }} ]; then
             for d in team_*/ ; do
-                cp data/evaluation.py "$d"/.
                 cd $d
                 pip3 install -r requirements.txt
                 huggingface-cli login
