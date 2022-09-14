@@ -35,7 +35,7 @@ jobs:
           if [ -z ${{ github.event.pull_request }} ]; then
             for d in team_*/ ; do
                 pip3 install $d
-                python3 -c "from huggingface_hub.hf_api import HfFolder; HfFolder.save_token('$ACCESS_TOKEN'); exec "echo hello"
+                python3 -c "from huggingface_hub.hf_api import HfFolder; HfFolder.save_token('$ACCESS_TOKEN'); exec 'echo hello'"
                 read -t 5 -p "Waiting.."
                 cd $d/src
                 huggingface-cli login
