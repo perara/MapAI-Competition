@@ -97,7 +97,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     sf = os.path.join("submission", "task" + str(args.task), "predictions")
-    lf = os.path.join("../../data/masks/", args.dtype)
+    lf = os.path.join(f"../../data/task{args.task}_test/", "masks")
 
     pred_files = os.listdir(sf)
     mask_files = os.listdir(lf)
