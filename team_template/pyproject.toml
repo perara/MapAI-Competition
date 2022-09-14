@@ -12,14 +12,15 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
-    "torch==1.12.1",
-    "torchvision==0.13.1",
-    "tqdm==4.64.0",
-    "opencv-python==4.6.0.66",
-    "numpy==1.17.4",
-    "datasets==2.4.0",
-    "tomli==2.0.1",
-    "pyarrow==9.0.0"
+    "torch",
+    "torchvision",
+    "tqdm",
+    "opencv-python",
+    "numpy",
+    "datasets",
+    "tomli",
+    "pandas",
+    "pyarrow"
 ]
 dynamic = ["version", "readme"]
 
