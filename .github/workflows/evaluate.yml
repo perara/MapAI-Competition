@@ -38,7 +38,7 @@ jobs:
                 cd $d/src
                 huggingface-cli login
                 expect "Token: "
-                send "$secret.HF_EVAL_ACCESS_TOKEN
+                send "$secret.HF_EVAL_ACCESS_TOKEN"
                 python3 evaluate_task_1.py --data_percentage 0.01 --dtype task1
                 python3 evaluate_task_2.py --data_percentage 0.01 --dtype task2
                 python3 evaluation.py --data_percentage 0.01 --dtype task1 --task 1
