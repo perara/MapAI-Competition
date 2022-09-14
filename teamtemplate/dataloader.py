@@ -7,35 +7,35 @@ import cv2 as cv
 
 from yaml import load, dump, Loader, Dumper
 
-from datautils import get_paths_from_folder, load_image, load_label, load_lidar
+from datautils import load_image, load_label, load_lidar
+
+from datasets import load_dataset
 
 class ImageAndLabelDataset(Dataset):
 
     def __init__(self,
                  opts: dict,
-                 datatype: str = "val"):
+                 datatype: str = "validation"):
 
         self.opts = opts
 
-        self.imagepaths = get_paths_from_folder(opts[datatype]["imagefolder"])
-        self.labelpaths = get_paths_from_folder(opts[datatype]["labelfolder"])
+        if "task" in datatype:
+            self.paths = load_dataset("../../hf_mapai_evaluation_data/mapai_evaluation_data.py", split=datatype, use_auth_token=True)
+        else:
+            self.paths = load_dataset("sjyhne/mapai_training_data", split=datatype)
 
         print()
 
-        if self.opts["data_percentage"] != 1.0:
-            self.imagepaths = self.imagepaths[:int(len(self.imagepaths) * self.opts["data_percentage"])]
-            self.labelpaths = self.labelpaths[:int(len(self.labelpaths) * self.opts["data_percentage"])]
-
-        assert len(self.imagepaths) == len(self.labelpaths), f"Length of imagepaths does not match length of labelpaths; {len(self.imagepaths)} != {len(self.labelpaths)}"
-
-        print(f"Number of images in {datatype}dataset: {len(self)}")
+        print(f"Using number of images in {datatype}dataset: {int(self.paths.num_rows * self.opts['data_percentage'])}/{self.paths.num_rows}")
 
     def __len__(self):
-        return len(self.imagepaths)
+        return int(self.paths.num_rows * self.opts["data_percentage"])
 
     def __getitem__(self, idx):
-        imagefilepath = self.imagepaths[idx]
-        labelfilepath = self.labelpaths[idx]
+        pathdict = self.paths[idx]
+
+        imagefilepath = pathdict["image"]
+        labelfilepath = pathdict["mask"]
 
         assert imagefilepath.split("/")[-1] == labelfilepath.split("/")[-1], f"imagefilename and labelfilename does not match; {imagefilepath.split('/')[-1]} != {labelfilepath.split('/')[-1]}"
 
@@ -52,31 +52,28 @@ class ImageLabelAndLidarDataset(Dataset):
 
     def __init__(self,
                  opts: dict,
-                 datatype: str = "val"):
+                 datatype: str = "validation"):
 
         self.opts = opts
 
-        self.imagepaths = get_paths_from_folder(opts[datatype]["imagefolder"])
-        self.labelpaths = get_paths_from_folder(opts[datatype]["labelfolder"])
-        self.lidarpaths = get_paths_from_folder(opts[datatype]["lidarfolder"])
+        if "task" in datatype:
+            self.paths = load_dataset("sjyhne/mapai_evaluation_data", split=datatype, use_auth_token=True)
+        else:
+            self.paths = load_dataset("sjyhne/mapai_training_data", split=datatype)
 
-        if opts["data_percentage"] != 1.0:
-            self.imagepaths = self.imagepaths[:int(len(self.imagepaths) * opts["data_percentage"]):]
-            self.labelpaths = self.labelpaths[:int(len(self.labelpaths) * opts["data_percentage"]):]
-            self.lidarpaths = self.lidarpaths[:int(len(self.lidarpaths) * opts["data_percentage"]):]
-
-        assert len(self.imagepaths) == len(self.labelpaths), f"Length of imagepaths does not match length of labelpaths; {len(self.imagepaths)} != {len(self.labelpaths)}"
-        assert len(self.imagepaths) == len(self.lidarpaths), f"Length of imagepaths does not match length of labelpaths; {len(self.imagepaths)} != {len(self.labelpaths)}"
-
-        print(f"Number of images in {datatype}dataset: {len(self)}")
+        print(
+            f"Using number of images in {datatype}dataset: {int(self.paths.num_rows * self.opts['data_percentage'])}/{self.paths.num_rows}")
 
     def __len__(self):
-        return len(self.imagepaths)
+        return int(self.paths.num_rows * self.opts["data_percentage"])
 
     def __getitem__(self, idx):
-        imagefilepath = self.imagepaths[idx]
-        labelfilepath = self.labelpaths[idx]
-        lidarfilepath = self.lidarpaths[idx]
+
+        pathdict = self.paths[idx]
+
+        imagefilepath = pathdict["image"]
+        labelfilepath = pathdict["mask"]
+        lidarfilepath = pathdict["lidar"]
 
         assert imagefilepath.split("/")[-1] == labelfilepath.split("/")[-1], f"imagefilename and labelfilename does not match; {imagefilepath.split('/')[-1]} != {labelfilepath.split('/')[-1]}"
         assert imagefilepath.split("/")[-1] == lidarfilepath.split("/")[-1], f"imagefilename and labelfilename does not match; {imagefilepath.split('/')[-1]} != {labelfilepath.split('/')[-1]}"

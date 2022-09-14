@@ -4,3 +4,4 @@ tqdm
 pyyaml
 opencv-python
 numpy
+datasets

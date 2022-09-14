@@ -57,6 +57,9 @@ def train(opts):
 
     device = opts["device"]
 
+
+
+    # The current model should be swapped with a different one of your choice
     try:
         model = torchvision.models.segmentation.fcn_resnet50(num_classes=opts["num_classes"],
                                                              backbone_weights=torchvision.models.ResNet50_Weights.IMAGENET1K_V1)
@@ -78,7 +81,7 @@ def train(opts):
     epochs = opts["epochs"]
 
     trainloader = create_dataloader(opts, "train")
-    valloader = create_dataloader(opts, "val")
+    valloader = create_dataloader(opts, "validation")
 
     bestscore = 0
 

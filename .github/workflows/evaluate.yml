@@ -16,7 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  evaluation:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -31,35 +31,6 @@ jobs:
           echo "${{ github.triggering_actor }}"
           echo "${{ github.repository_owner }}"
 
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJSON(github.event) }}
-        run: echo "$GITHUB_CONTEXT"
-
-      - name: Check if pull request
-        run: |
-          if [ -z ${{ github.event.pull_request }} ]; then
-            echo this is not a pull request
-          elif [ -z ${{ github.event.commit }} ]; then
-            echo this is not a commit
-          fi
-
-      - name: "Checkout private repo with PAT"
-        run: |
-          echo CLONING
-          if [ -z ${{ github.event.pull_request }} ]; then
-            echo PRIVATE CLONE
-            git clone https://${{ secrets.PAT_EVALUATION_DATA }}@github.com/Sjyhne/mapai_evaluation_data.git data
-          else
-            echo PUBLIC CLONE
-            git clone https://github.com/Sjyhne/mapai_validation_data.git data
-          fi
-
-      - name: "What is in my repo"
-        run: |
-          ls
-
-
       # Runs a set of commands using the runners shell
       - name: Evaluation
         run: |
@@ -68,15 +39,17 @@ jobs:
                 cp data/evaluation.py "$d"/.
                 cd $d
                 pip3 install -r requirements.txt
-                python3 evaluate_task_1.py --data_percentage 0.01 --dtype test
-                python3 evaluate_task_2.py --data_percentage 0.01 --dtype test
-                python3 evaluation.py --data_percentage 0.01 --dtype test --task 1
-                python3 evaluation.py --data_percentage 0.01 --dtype test --task 2
+                huggingface-cli login
+                ${{ secrets.HF_EVAL_ACCESS_TOKEN }}
+                python3 evaluate_task_1.py --data_percentage 0.01 --dtype task1
+                python3 evaluate_task_2.py --data_percentage 0.01 --dtype task2
+                python3 evaluation.py --data_percentage 0.01 --dtype task1 --task 1
+                python3 evaluation.py --data_percentage 0.01 --dtype task2 --task 2
                 echo Finished evaluation, exiting
                 cd ..
             done
           else
-            for d in participant_*/ ; do
+            for d in team_*/ ; do
                 cp data/evaluation.py "$d"/.
                 echo have participant as substring - $d
                 cd $d
@@ -85,14 +58,14 @@ jobs:
                 echo -------------------
                 echo |Evaluating task 1|
                 echo -------------------
-                python3 evaluate_task_1.py --data_percentage 0.01 --dtype val
-                python3 evaluation.py --data_percentage 0.01 --dtype val --task 1
+                python3 evaluate_task_1.py --data_percentage 0.01 --dtype task1
+                python3 evaluation.py --data_percentage 0.01 --dtype task1 --task 1
                 echo " "
                 echo -------------------
                 echo |Evaluating task 2|
                 echo -------------------
-                python3 evaluate_task_2.py --data_percentage 0.01 --dtype val
-                python3 evaluation.py --data_percentage 0.01 --dtype val --task 2
+                python3 evaluate_task_2.py --data_percentage 0.01 --dtype task2
+                python3 evaluation.py --data_percentage 0.01 --dtype task2 --task 2
                 echo " "
                 echo Finished evaluation, exiting
                 cd ..

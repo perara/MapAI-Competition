@@ -1,0 +1,25 @@
+class_to_color:
+  background: 0
+  building: 255
+classes:
+- background
+- building
+config: config/data.yaml
+data_percentage: 0.05
+device: cpu
+epochs: 10
+imagesize: 500
+lr: 0.001
+num_classes: 2
+rundir: runs/task_2/run_0
+task: 2
+test:
+  batchsize: 1
+  shuffle: false
+train:
+  batchsize: 8
+  shuffle: true
+validation:
+  batchsize: 1
+  shuffle: false
+version: 1.0
