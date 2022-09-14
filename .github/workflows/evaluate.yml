@@ -17,6 +17,8 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   evaluation:
+    env:
+      ACCESS_TOKEN: $HF_EVAL_ACCESS_TOKEN
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -34,8 +36,6 @@ jobs:
             for d in team_*/ ; do
                 pip3 install $d
                 cd $d/src
-                huggingface-cli login
-                $secrets.HF_EVAL_ACCESS_TOKEN
                 python3 evaluate_task_1.py --data_percentage 0.01 --dtype task1
                 python3 evaluate_task_2.py --data_percentage 0.01 --dtype task2
                 python3 evaluation.py --data_percentage 0.01 --dtype task1 --task 1

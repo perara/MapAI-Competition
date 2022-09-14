@@ -4,6 +4,7 @@ from torch.utils.data import Dataset, DataLoader
 import torch
 import numpy as np
 import cv2 as cv
+import os
 
 from yaml import load, dump, Loader, Dumper
 
@@ -20,7 +21,8 @@ class ImageAndLabelDataset(Dataset):
         self.opts = opts
 
         if "task" in datatype:
-            self.paths = load_dataset("../../hf_mapai_evaluation_data/mapai_evaluation_data.py", split=datatype, use_auth_token=True)
+            auth_token = os.environ["ACCESS_TOKEN"]
+            self.paths = load_dataset("../../hf_mapai_evaluation_data/mapai_evaluation_data.py", split=datatype, use_auth_token=auth_token)
         else:
             self.paths = load_dataset("sjyhne/mapai_training_data", split=datatype)
 
@@ -57,7 +59,8 @@ class ImageLabelAndLidarDataset(Dataset):
         self.opts = opts
 
         if "task" in datatype:
-            self.paths = load_dataset("sjyhne/mapai_evaluation_data", split=datatype, use_auth_token=True)
+            auth_token = os.environ["ACCESS_TOKEN"]
+            self.paths = load_dataset("../../hf_mapai_evaluation_data/mapai_evaluation_data.py", split=datatype, use_auth_token=auth_token)
         else:
             self.paths = load_dataset("sjyhne/mapai_training_data", split=datatype)
 
