@@ -21,8 +21,7 @@ class ImageAndLabelDataset(Dataset):
         self.opts = opts
 
         if "task" in datatype:
-            auth_token = os.environ["ACCESS_TOKEN"]
-            self.paths = load_dataset("sjyhne/mapai_evaluation_data", split=datatype, use_auth_token=auth_token)
+            self.paths = load_dataset("sjyhne/mapai_evaluation_data", split=datatype, use_auth_token=True)
         else:
             self.paths = load_dataset("sjyhne/mapai_training_data", split=datatype)
 
@@ -59,8 +58,7 @@ class ImageLabelAndLidarDataset(Dataset):
         self.opts = opts
 
         if "task" in datatype:
-            auth_token = os.environ["ACCESS_TOKEN"]
-            self.paths = load_dataset("sjyhne/mapai_evaluation_data", split=datatype, use_auth_token=auth_token)
+            self.paths = load_dataset("sjyhne/mapai_evaluation_data", split=datatype, use_auth_token=True)
         else:
             self.paths = load_dataset("sjyhne/mapai_training_data", split=datatype)
 
