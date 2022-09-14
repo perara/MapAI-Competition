@@ -32,8 +32,8 @@ jobs:
         run: |
           if [ -z ${{ github.event.pull_request }} ]; then
             for d in team_*/ ; do
-                cd $d
-                pip3 install -r requirements.txt
+                pip3 install $d
+                cd $d/src
                 huggingface-cli login
                 ${{ secrets.HF_EVAL_ACCESS_TOKEN }}
                 python3 evaluate_task_1.py --data_percentage 0.01 --dtype task1
@@ -41,13 +41,12 @@ jobs:
                 python3 evaluation.py --data_percentage 0.01 --dtype task1 --task 1
                 python3 evaluation.py --data_percentage 0.01 --dtype task2 --task 2
                 echo Finished evaluation, exiting
-                cd ..
+                cd ../..
             done
           else
             for d in team_*/ ; do
-                cp data/evaluation.py "$d"/.
-                cd $d
-                pip3 install -r requirements.txt
+                pip3 install $d
+                cd $d/src
                 echo " "
                 echo -------------------
                 echo |Evaluating task 1|
@@ -62,6 +61,6 @@ jobs:
                 python3 evaluation.py --data_percentage 0.01 --dtype validation --task 2
                 echo " "
                 echo Finished evaluation, exiting
-                cd ..
+                cd ../..
             done
           fi
