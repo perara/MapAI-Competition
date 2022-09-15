@@ -76,10 +76,27 @@ The template is already ready with code that can run, train, and evaluate - this
 code and you are allowed to change everything related to the training of the models. When it comes
 the evaluation files, it is more restricted, as they are used to automatically evaluate the models.
 
+
+
 #### Step 6 - Delivery
 
-When the deadline are due, there are a few steps that will have to be taken in order to check
-that your code is ready for submission. 
+When the deadline are due, there are a few steps that will have to be taken to get ready for
+submission.
+
+##### Step 6.1 - Push your changes to the fork
+
+Push all of your changes to the fork - this will make your code and models visible in the fork.
+This is done by running the following command:
+
+`git push submission master`
+
+As we set the origin for the fork to _submission_ in the start.
+
+##### 6.2 - Create a pull request to the base repo
+
+The next step is to create a pull request against the base repository. This will initiate a 
+workflow that runs and evaluates the model on a validation dataset. This workflow will have to
+pass in order to deliver the submission.
 
 
 When the deadline is finished, we will evaluate all of your code on the hidden test-dataset and publish the results
