@@ -130,7 +130,7 @@ dmypy.json
 
 *.pt
 data/train
-data/val
+data/validation
 data/test
 data/task1_test
 data/task2_test

@@ -23,7 +23,7 @@ if __name__ == "__main__":
     parser.add_argument("--weights", type=str, help="Path to weights for the specific model and task")
     parser.add_argument("--test_data", type=str, help="Path to test data")
     parser.add_argument("--data_percentage", type=float, default=1.0, help="Percentage of the whole dataset that is used")
-    parser.add_argument("--dtype", type=str, default="val", help="Which data to test against")
+    parser.add_argument("--dtype", type=str, default="validation", help="Which data to test against")
 
     args = parser.parse_args()
 

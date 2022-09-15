@@ -96,7 +96,7 @@ it will default to _origin_.
 It is important to follow the structure of the team_template in the repository. The easiest way to
 keep this structure is by just creating a copy of the team_template folder and name it according
 to your team name. The folder you create must follow the correct naming structure, which is 
-`team_<team_name>`. You can copy the team_template and name it with the following command:
+`team_<team_name>` (Please make it kinda unique, e.g. two first letters of each teammate). You can copy the team_template and name it with the following command:
 
 `cp -r team_template ./team_<team_name>`
 
