@@ -34,7 +34,7 @@ jobs:
         run: |
           datapercentage=0.01
           echo "${{ github.event.release }}"
-          if [ -v ${{ github.event.release }} ]; then
+          if [ ${{ github.event.release }} != "" ]; then
             for d in team_*/ ; do
                 pip3 install $d
                 python3 -c "from huggingface_hub.hf_api import HfFolder; HfFolder.save_token('$ACCESS_TOKEN')"
