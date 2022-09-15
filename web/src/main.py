@@ -15,6 +15,10 @@ class Participant(BaseModel):
     description: str = None
     python_version: str = None
     error: str = None
+    iou1: float = None
+    biou1: float = None
+    iou2: float = None
+    biou2: float = None
 
 
 def get_competition_root(prefix: str):
@@ -62,16 +66,16 @@ def parse_participant(participant_path: pathlib.Path):
         task1iou = task1["iou"]
         task1biou = task1["biou"]
     except ValueError as e:
-        task1iou = "N/A"
-        task1biou = "N/A"
+        task1iou = 0.0
+        task1biou = 0.0
 
     try:
         task2 = json.load(open("../results_task_2.json", "r"))
         task2iou = task2["iou"]
         task2biou = task2["biou"]
     except ValueError as e:
-        task2iou = "N/A"
-        task2biou = "N/A"
+        task2iou = 0.0
+        task2biou = 0.0
 
     return dict(
         name=participant_config["project"]["name"],
