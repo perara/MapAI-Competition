@@ -68,7 +68,7 @@ if __name__ == "__main__":
     iou_scores = np.ndarray((len(testloader)))
     biou_scores = np.ndarray((len(testloader)))
 
-    for idx, batch in tqdm(enumerate(testloader), total=len(testloader), desc="Inference"):
+    for idx, batch in tqdm(enumerate(testloader), total=len(testloader), desc="Inference", leave=False):
         image, label, filename = batch
         image = image.to(device)
         label = label.to(device)

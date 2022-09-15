@@ -103,7 +103,7 @@ if __name__ == "__main__":
     mask_files = os.listdir(lf)
 
     pred_paths = [os.path.join(sf, x) for x in os.listdir(sf) if x.split(".")[-1] == "tif"]
-    mask_paths = [os.path.join(lf, x) for x in os.listdir(lf)[:int(len(os.listdir(lf)) * args.data_percentage)]]
+    mask_paths = [os.path.join(lf, x) for x in pred_paths.split("/")[-1]]
 
     # Check that num preds is equal num masks
     assert len(pred_paths) == len(mask_paths), f"There are not an equal amount of masks and preds {len(mask_paths)}, {len(pred_paths)}"
@@ -133,5 +133,5 @@ if __name__ == "__main__":
         iou_scores[i] = iouscore
         biou_scores[i] = biouscore
 
-    print(f"Evaluation {str(Path('..').parent.absolute()).split('/')[-1]} Task {args.task} -", "IoU:", np.round(iou_scores.mean(), 5), "BIoU:", np.round(biou_scores.mean(), 5))
+    print(f"Evaluation {str(Path('../..').parent.absolute()).split('/')[-2]} Task {args.task} -", "IoU:", np.round(iou_scores.mean(), 5), "BIoU:", np.round(biou_scores.mean(), 5))
 
