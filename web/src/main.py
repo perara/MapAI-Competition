@@ -1,4 +1,5 @@
 import argparse
+import json
 
 import jinja2
 from jinja2 import FileSystemLoader
@@ -56,10 +57,30 @@ def parse_participant(participant_path: pathlib.Path):
     property_exists(participant_config["project"], "description")
     property_exists(participant_config["project"], "requires-python")
 
+    try:
+        task1 = json.load(open("../results_task_1.json", "r"))
+        task1iou = task1["iou"]
+        task1biou = task1["biou"]
+    except ValueError as e:
+        task1iou = "N/A"
+        task1biou = "N/A"
+
+    try:
+        task2 = json.load(open("../results_task_2.json", "r"))
+        task2iou = task2["iou"]
+        task2biou = task2["biou"]
+    except ValueError as e:
+        task2iou = "N/A"
+        task2biou = "N/A"
+
     return dict(
         name=participant_config["project"]["name"],
         description=participant_config["project"]["description"],
-        python_version=participant_config["project"]["requires-python"]
+        python_version=participant_config["project"]["requires-python"],
+        iou1=task1iou,
+        biou1=task1biou,
+        iou2=task2iou,
+        biou2=task2biou
     )
 
 

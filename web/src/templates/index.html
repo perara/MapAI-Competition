@@ -41,6 +41,10 @@
                 <th>Name</th>
                 <th>Description</th>
                 <th>Python Version</th>
+                <th>Task 1 (IoU)</th>
+                <th>Task 1 (BIoU)</th>
+                <th>Task 2 (IoU)</th>
+                <th>Task 2 (BIoU)</th>
             </tr>
             </thead>
             <tbody>
@@ -53,6 +57,10 @@
                     <td>{{ participant.name }}</td>
                     <td>{{ participant.description }}</td>
                     <td>{{ participant.python_version }}</td>
+                    <td>{{ participant.iou1 }}</td>
+                    <td>{{ participant.biou1 }}</td>
+                    <td>{{ participant.iou2 }}</td>
+                    <td>{{ participant.biou2 }}</td>
                 {% endif %}
 
             </tr>

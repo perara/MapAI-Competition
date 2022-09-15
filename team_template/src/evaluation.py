@@ -3,6 +3,7 @@ import numpy as np
 
 import argparse
 import os
+import json
 from pathlib import Path
 
 
@@ -138,9 +139,9 @@ if __name__ == "__main__":
 
     print(f"Evaluation {str(Path('../..').parent.absolute())} Task {args.task} -", "IoU:", np.round(iou_scores.mean(), 5), "BIoU:", np.round(biou_scores.mean(), 5))
 
-    result_file = "results.txt"
+    result_file = f"results_task_{args.task}.json"
 
-    result_string = f"IoU: {np.round(iou_scores.mean(), 5)}\nBIoU: {np.round(biou_scores.mean(), 5)}"
+    result_dict = {"iou": np.round(iou_scores.mean(), 5), "biou": np.round(biou_scores.mean(), 5)}
 
-    with open(result_file, "w") as f:
-        f.write(result_string)
+    json.dump(result_dict, open(result_file, "w"))
+

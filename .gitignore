@@ -136,3 +136,5 @@ data/task1_test
 data/task2_test
 submission/
 runs/
+
+results_task_*.json
