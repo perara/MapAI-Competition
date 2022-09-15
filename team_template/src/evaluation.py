@@ -92,12 +92,15 @@ if __name__ == "__main__":
 
     parser.add_argument("--task", type=int, default=1, help="The task to evaluate")
     parser.add_argument("--data_percentage", type=float, default=1.0)
-    parser.add_argument("--dtype", type=str, default="val", help="Which data to test against")
+    parser.add_argument("--dtype", type=str, default="validation", help="Which data to test against")
 
     args = parser.parse_args()
 
     sf = os.path.join("submission", "task" + str(args.task), "predictions")
-    lf = os.path.join(f"../../data/task{args.task}_test/", "masks")
+    if args.dtype != "validation":
+        lf = os.path.join(f"../../data/task{args.task}_test/", "masks")
+    else:
+        lf = os.path.join("../../data/", args.dtype, "masks")
 
     pred_files = os.listdir(sf)
     mask_files = os.listdir(lf)
