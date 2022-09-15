@@ -136,5 +136,11 @@ if __name__ == "__main__":
         iou_scores[i] = iouscore
         biou_scores[i] = biouscore
 
-    print(f"Evaluation {str(Path('../..').parent.absolute()).split('/')[-2]} Task {args.task} -", "IoU:", np.round(iou_scores.mean(), 5), "BIoU:", np.round(biou_scores.mean(), 5))
+    print(f"Evaluation {str(Path('../..').parent.absolute())} Task {args.task} -", "IoU:", np.round(iou_scores.mean(), 5), "BIoU:", np.round(biou_scores.mean(), 5))
 
+    result_file = "results.txt"
+
+    result_string = f"IoU: {np.round(iou_scores.mean(), 5)}\nBIoU: {np.round(biou_scores.mean(), 5)}"
+
+    with open(result_file, "w") as f:
+        f.write(result_string)

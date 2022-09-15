@@ -16,7 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  evaluation:
+  download_and_test:
     env:
       ACCESS_TOKEN: ${{ secrets.HF_EVAL_ACCESS_TOKEN }}
     # The type of runner that the job will run on
