@@ -45,6 +45,13 @@ from rural to urban locations. The diversity poses a vital requirement for the m
 generalize to the various combinations. These hardships motivate the competition and our 
 evaluation method.
 
+### Rules
+
+* You are not allowed to alter the training and validation splits - they must stay as is.
+* You are not allowed to use other training data than what is provided through the project 
+(However, pretrained models are allowed).
+* You are encouraged to create teams, but submissions must come from the same fork.
+
 ## Instructions
 
 The competition will be arranged on Github. The steps for participation is as following:
@@ -96,7 +103,8 @@ it will default to _origin_.
 It is important to follow the structure of the team_template in the repository. The easiest way to
 keep this structure is by just creating a copy of the team_template folder and name it according
 to your team name. The folder you create must follow the correct naming structure, which is 
-`team_<team_name>` (Please make it kinda unique, e.g. two first letters of each teammate). You can copy the team_template and name it with the following command:
+`team_<team_name>` (Please make it kinda unique, e.g. two first letters of each teammate). 
+You can copy the team_template and name it with the following command:
 
 `cp -r team_template ./team_<team_name>`
 
