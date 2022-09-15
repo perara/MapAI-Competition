@@ -32,16 +32,17 @@ jobs:
       # If not field github.event.pull_request exists, then do first forloop
       - name: Evaluation
         run: |
+          datapercentage=0.01
           if [ -z ${{ github.event.pull_request }} ]; then
             for d in team_*/ ; do
                 pip3 install $d
                 python3 -c "from huggingface_hub.hf_api import HfFolder; HfFolder.save_token('$ACCESS_TOKEN')"
                 cd $d/src
                 echo $ACCESS_TOKEN | huggingface-cli login
-                python3 evaluate_task_1.py --data_percentage 0.01 --dtype task1
-                python3 evaluate_task_2.py --data_percentage 0.01 --dtype task2
-                python3 evaluation.py --dtype task1 --task 1
-                python3 evaluation.py --dtype task2 --task 2
+                python3 evaluate_task_1.py --data_percentage $datapercentage --dtype task1
+                python3 evaluate_task_2.py --data_percentage $datapercentage --dtype task2
+                python3 evaluation.py --data_percentage $datapercentage --dtype task1 --task 1
+                python3 evaluation.py --data_percentage $datapercentage --dtype task2 --task 2
                 echo Finished evaluation, exiting
                 cd ../..
             done

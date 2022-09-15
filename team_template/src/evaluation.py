@@ -103,7 +103,7 @@ if __name__ == "__main__":
     mask_files = os.listdir(lf)
 
     pred_paths = [os.path.join(sf, x) for x in os.listdir(sf) if x.split(".")[-1] == "tif"]
-    mask_paths = [os.path.join(lf, x) for x in pred_paths.split("/")[-1]]
+    mask_paths = [os.path.join(lf, x.split("/")[-1]) for x in pred_paths]
 
     # Check that num preds is equal num masks
     assert len(pred_paths) == len(mask_paths), f"There are not an equal amount of masks and preds {len(mask_paths)}, {len(pred_paths)}"
