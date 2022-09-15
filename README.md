@@ -20,7 +20,30 @@ competition is into two separate tasks:
 
 ### Dataset
 
-The training and validation data is gathered from Denmark 
+The training and validation data is an open building segmentation dataset from Denmark. While the
+test data comes from various locations in Norway which is currently not released yet. All
+data will be released after the competition in a collected huggingface dataset.
+
+It is important to note that the training and evaluation data comes from real-world data. As a
+result there will be flaws in the dataset, such as missing masks or masks that does not correspond
+to a building in an image.
+
+The images come from orthophotos generated using a DTM, and therefore, the building-masks are
+slightly skewed compared to the ground truth masks.
+
+### Motivation
+
+Acquiring accurate segmentation masks of buildings is challenging since the training data 
+derives from real-world photographs. As a result, the data often have varying quality, 
+large class imbalance, and contains noise in different forms. The segmentation masks 
+are affected by optical issues such as shadows, reflections, and perspectives. Additionally, 
+trees, powerlines, or even other buildings may obstruct the visibility. 
+Furthermore, small buildings have proved to be more difficult to segment than larger ones as 
+they are harder to detect, more prone to being obstructed, and often confused with other classes. 
+Lastly, different buildings are found in several diverse areas, ranging 
+from rural to urban locations. The diversity poses a vital requirement for the model to 
+generalize to the various combinations. These hardships motivate the competition and our 
+evaluation method.
 
 ## Instructions
 
