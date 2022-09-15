@@ -20,6 +20,7 @@ class Participant(BaseModel):
     biou1: float = None
     iou2: float = None
     biou2: float = None
+    score: float = None
 
 
 def get_competition_root(prefix: str):
@@ -66,7 +67,7 @@ def parse_participant(participant_path: pathlib.Path):
         task1 = json.load(open(os.path.join(participant_path,"src/results_task_1.json"), "r"))
         task1iou = task1["iou"]
         task1biou = task1["biou"]
-    except ValueError as e:
+    except Exception as e:
         task1iou = 0.0
         task1biou = 0.0
 
@@ -74,9 +75,11 @@ def parse_participant(participant_path: pathlib.Path):
         task2 = json.load(open(os.path.join(participant_path,"src/results_task_2.json"), "r"))
         task2iou = task2["iou"]
         task2biou = task2["biou"]
-    except ValueError as e:
+    except Exception as e:
         task2iou = 0.0
         task2biou = 0.0
+
+    score = (task1iou + task1biou + task2iou + task2biou)/4
 
     return dict(
         name=participant_config["project"]["name"],
@@ -85,7 +88,8 @@ def parse_participant(participant_path: pathlib.Path):
         iou1=task1iou,
         biou1=task1biou,
         iou2=task2iou,
-        biou2=task2biou
+        biou2=task2biou,
+        score=score
     )
 
 
