@@ -17,6 +17,71 @@ The competition will be arranged on Github. The steps for participation is as fo
    * `git push submission`
    * Create pull request
 
+### Steps
+
+#### Step 1 - Fork
+
+Fork the [MapAI-Competition](https://github.com/Sjyhne/MapAI-Competition) repository in Github.
+Forking creates a clone of the base repo on your own user and allows for easier pull requests
+and so on.
+
+#### Step 2 - Clone with -o parameter
+
+Clone your fork down to your computer with the following command:
+
+`git clone git@github.com:<your_username>/MapAI-Competition.git -o submission`
+
+The _-o_ parameter sets the origin name for this repostory to be "_submission_" and not the
+default which is "_origin_".
+
+#### Step 3 - Create a new private (or public) repository
+
+Create a new private repository on your own github. The reason we need this is because it is
+not possible to set the visibility of a fork to private. Therefore, to keep your development progress
+private, we have to add another remote repository for the MapAI-Competition fork.
+
+To do this, you have to change directories into the cloned fork. E.g. `cd MapAI-Competition`.
+
+#### Step 4 - Add private remote repository to fork
+
+Then, we can keep developing in the cloned fork and push the changes to the private repository.
+To be able to do this, we have to add remote origin by running the following command:
+
+`git remote add origin <private_repository>`
+
+E.g.
+
+`git remote add origin git@github.com:Sjyhne/my_private_repository.git`
+
+This will enable you to push your changes to the private repository and not the public fork
+by just pushing as usual to origin master. Because we have not specified the origin for the remote 
+it will default to _origin_.
+
+`git push origin <branch>`
+
+#### Step 5 - Create your own team-folder
+
+It is important to follow the structure of the team_template in the repository. The easiest way to
+keep this structure is by just creating a copy of the team_template folder and name it according
+to your team name. The folder you create must follow the correct naming structure, which is 
+`team_<team_name>`. You can copy the team_template and name it with the following command:
+
+`cp -r team_template ./team_<team_name>`
+
+For the entirety of the competition, you will only change and develop inside this folder. Nothing
+outside the team-folder should be changed or altered. You can find more information about
+the folder structure and contents in the section about _folder structure_.
+
+The template is already ready with code that can run, train, and evaluate - this is just template
+code and you are allowed to change everything related to the training of the models. When it comes
+the evaluation files, it is more restricted, as they are used to automatically evaluate the models.
+
+#### Step 6 - Delivery
+
+When the deadline are due, there are a few steps that will have to be taken in order to check
+that your code is ready for submission. 
+
+
 When the deadline is finished, we will evaluate all of your code on the hidden test-dataset and publish the results
 on a github page.
 

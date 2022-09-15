@@ -83,6 +83,8 @@ if __name__ == "__main__":
         prediction = np.uint8(prediction)
         label = np.uint8(label)
 
+        assert prediction.shape == label.shape, f"Prediction and label shape is not same, pls fix [{prediction.shape} - {label.shape}]"
+
         iou_score = iou(prediction, label)
         biou_score = biou(label, prediction)
 
