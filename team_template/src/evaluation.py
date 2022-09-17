@@ -137,11 +137,11 @@ if __name__ == "__main__":
         iou_scores[i] = iouscore
         biou_scores[i] = biouscore
 
-    print(f"Evaluation {str(Path('../..').parent.absolute())} Task {args.task} -", "IoU:", np.round(iou_scores.mean(), 5), "BIoU:", np.round(biou_scores.mean(), 5))
+    print(f"Evaluation {str(Path('../..').parent.absolute())} Task {args.task} -", "IoU:", np.round(iou_scores.mean(), 4), "BIoU:", np.round(biou_scores.mean(), 4))
 
     result_file = f"results_task_{args.task}.json"
 
-    result_dict = {"iou": np.round(iou_scores.mean(), 5), "biou": np.round(biou_scores.mean(), 5)}
+    result_dict = {"iou": np.round(iou_scores.mean(), 4), "biou": np.round(biou_scores.mean(), 4)}
 
     json.dump(result_dict, open(result_file, "w"))
 

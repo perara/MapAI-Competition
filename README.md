@@ -47,10 +47,23 @@ evaluation method.
 
 ### Rules
 
+Below is a set of rules that is necessary to follow in order to not be disqualified
+
 * You are not allowed to alter the training and validation splits - they must stay as is.
 * You are not allowed to use other training data than what is provided through the project 
 (However, pretrained models are allowed).
 * You are encouraged to create teams, but submissions must come from the same fork.
+* You are not allowed to alter the evaluation.py file.
+* evaluate_task_*.py can only be altered in such a fashion that it is able to run your model.
+
+### Registration
+
+Forking the base repository is part of the registration process. However, we would also like you to register your information
+in a Google forms. The main reason comes from the ability to reach out to the participant with important information. 
+As mentioned earlier, the competition framework is piloting with this competition, and therefore it will be more
+prone to change compared to more established competition frameworks.
+
+[Google form]()
 
 ## Instructions
 
@@ -140,3 +153,9 @@ pass in order to deliver the submission.
 
 When the deadline is finished, we will evaluate all of your code on the hidden test-dataset and publish the results
 on a github page.
+
+
+### Checklist before submission
+
+* Verify that, from inside the src folder, you can run the following commands:
+  * `python3 evaluate_task_1.py --dtype validation --device cuda:0`
