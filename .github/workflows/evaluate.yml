@@ -64,6 +64,10 @@ jobs:
                 echo -------------------
                 python3 evaluate_task_2.py --data_percentage $datapercentage --dtype validation
                 python3 evaluation.py --data_percentage $datapercentage --dtype validation --task 2
+                
+                git add results_task_*.json
+                git commit -m "add result files"
+                git push origin master
                 echo " "
                 echo Finished evaluation, exiting
                 cd ../..
