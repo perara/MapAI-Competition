@@ -16,7 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  download_and_test:
+  evaluate:
     env:
       ACCESS_TOKEN: ${{ secrets.HF_EVAL_ACCESS_TOKEN }}
     # The type of runner that the job will run on
@@ -69,3 +69,8 @@ jobs:
                 cd ../..
             done
           fi
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: my-artifact
+          path: ./**/results_task_*.json
