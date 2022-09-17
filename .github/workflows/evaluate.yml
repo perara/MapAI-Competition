@@ -73,4 +73,4 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: my-artifact
-          path: ./**/results_task_*.json
+          path: ./**/**/results_task_*.json

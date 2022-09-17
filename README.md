@@ -6,14 +6,14 @@ Norwegian Artificial Intelligence Research Consortium (NORA),
 AI:Hub, and Norkart.
 
 For this competition we are testing a new competition-framework/template for arranging 
-competitions using Github and Huggingface. This is the first competition we are arranging 
-in this manner, and therefore appreciate your feedback and will be available for questions.
+competitions using Github and Huggingface. This is the first competition we are arranging with
+the framework, and therefore appreciate your feedback and will be available for questions.
 If there is a question or something is wrong, please raise a issue regarding the question.
 
 ## Competition Information
 
 The competition aims at building segmentation using aerial images and lidar data. The 
-competition is into two separate tasks:
+competition consists of two different tasks:
 
 1. Building segmentation only using aerial images.
 2. Building segmentation using lidar data (it is allowed to combine the lidar with aerial images).
@@ -133,7 +133,7 @@ the evaluation files, it is more restricted, as they are used to automatically e
 
 #### Step 6 - Delivery
 
-When the deadline are due, there are a few steps that will have to be taken to get ready for
+When the deadline is due, there are a few steps that will have to be taken to get ready for
 submission.
 
 ##### Step 6.1 - Push your changes to the fork
@@ -158,4 +158,13 @@ on a github page.
 ### Checklist before submission
 
 * Verify that, from inside the src folder, you can run the following commands:
-  * `python3 evaluate_task_1.py --dtype validation --device cuda:0`
+  * `python3 evaluate_task_1.py --dtype validation --device cuda:0/cpu`
+  * `python3 evaluate_task_2.py --dtype validation --device cuda:0/cpu`
+  * `python3 evaluation.py --task 1 --dtype validation --device cuda:0/cpu`
+  * `python3 evaluation.py --task 2 --dtype validation --device cuda:0/cpu`
+* Verify that you are able to run the evaluation pipeline
+  * To do this you can go to your own repository.
+  * Then go to the actions tab
+  * Press the "Evaluation Pipeline"
+  * Then press the "run workflow" for the branch you are testing (most likely master)
+  * Ensure the entire workflow runs without any issues (most likely environment issues here)
