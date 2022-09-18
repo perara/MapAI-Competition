@@ -64,17 +64,20 @@ jobs:
                 echo -------------------
                 python3 evaluate_task_2.py --data_percentage $datapercentage --dtype validation
                 python3 evaluation.py --data_percentage $datapercentage --dtype validation --task 2
+                git add results_task_*.json
                 echo " "
                 echo Finished evaluation, exiting
                 cd ../..
             done
           fi
 
-      - name: Where am I
+      - name: Commit files
         run: |
-          pwd
-
-      - uses: actions/upload-artifact@v3
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "Adding result files generated during evaluation" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@master
         with:
-          name: my-artifact
-          path: ./**/**/results_task_*.json
+          github_token: ${{ secrets.ADD_RESULTS_TOKEN }}
+          branch: ${{ github.ref }}
