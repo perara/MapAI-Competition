@@ -28,54 +28,64 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Install ubuntu dependencies
+        run: sudo apt-get update && sudo apt-get install -y python3-pip ffmpeg libsm6 libxext6
+
+      - name: Install Pyenv
+        run: curl https://pyenv.run | bash
+
+      # Install python packages that are required.
+      - name: Install Python Global Dependencies
+        run: python3 -m pip install tomli pyenv-api
+
       # Runs a set of commands using the runners shell
       # If not field github.event.pull_request exists, then do first forloop
       - name: Evaluation
         run: |
+          # Setup pyenv
+          export PYENV_ROOT="$HOME/.pyenv"
+          command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+          eval "$(pyenv init -)"
+          
+          # Variables
           datapercentage=0.01
-          if [ ${{ github.event.release }} != "" ]; then
-            echo "Private evaluation"
-            for d in team_*/ ; do
-                python3 -m venv env
-                source env/bin/activate
-                pip3 install $d
-                python3 -c "from huggingface_hub.hf_api import HfFolder; HfFolder.save_token('$ACCESS_TOKEN')"
-                cd $d/src
-                echo $ACCESS_TOKEN | huggingface-cli login
-                python3 evaluate_task_1.py --data_percentage $datapercentage --dtype task1
-                python3 evaluate_task_2.py --data_percentage $datapercentage --dtype task2
-                python3 evaluation.py --data_percentage $datapercentage --dtype task1 --task 1
-                python3 evaluation.py --data_percentage $datapercentage --dtype task2 --task 2
-                deactivate
-                echo Finished evaluation, exiting
-                cd ../..
-            done
-          else
-            echo "Public evaluation"
-            for d in team_*/ ; do
-                python3 -m venv env
-                source env/bin/activate
-                pip3 install $d
-                cd $d/src
-                echo " "
-                echo -------------------
-                echo |Evaluating task 1|
-                echo -------------------
-                python3 evaluate_task_1.py --data_percentage $datapercentage --dtype validation
-                python3 evaluation.py --data_percentage $datapercentage --dtype validation --task 1
-                echo " "
-                echo -------------------
-                echo |Evaluating task 2|
-                echo -------------------
-                python3 evaluate_task_2.py --data_percentage $datapercentage --dtype validation
-                python3 evaluation.py --data_percentage $datapercentage --dtype validation --task 2
-                git add results_task_*.json
-                echo " "
-                deactivate
-                echo Finished evaluation, exiting
-                cd ../..
-            done
-          fi
+          
+          for team in team_*/ ; do
+            # Set-up python environment
+            pyenv_exec=$(python3 .github/scripts/version_extractor.py --config $team/pyproject.toml)
+            eval "$pyenv_exec -m venv env"
+            source env/bin/activate
+            
+            # Install team dependencies
+            pip3 install $team
+          
+            # Enter team directory
+            cd $team/src
+          
+          
+            if [ -z ${{ github.event.release }} ]; then
+              # Validation tests (on public data)
+              python3 evaluate_task_1.py --data_percentage $datapercentage --dtype validation
+              python3 evaluation.py --data_percentage $datapercentage --dtype validation --task 1
+              python3 evaluate_task_2.py --data_percentage $datapercentage --dtype validation
+              python3 evaluation.py --data_percentage $datapercentage --dtype validation --task 2
+            else
+              # Validation tests (on private data, competition submission)
+              echo $ACCESS_TOKEN | huggingface-cli login
+              python3 evaluate_task_1.py --data_percentage $datapercentage --dtype task1
+              python3 evaluate_task_2.py --data_percentage $datapercentage --dtype task2
+              python3 evaluation.py --data_percentage $datapercentage --dtype task1 --task 1
+              python3 evaluation.py --data_percentage $datapercentage --dtype task2 --task 2
+              git add results_task_*.json
+            fi
+            
+            # Deactivate virtual env
+            deactivate
+          
+            echo "Finished evaluation for $team."
+            cd ../..
+
+          done
 
       - name: Commit files
         run: |
