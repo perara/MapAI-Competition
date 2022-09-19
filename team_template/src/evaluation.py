@@ -58,8 +58,8 @@ if __name__ == "__main__":
     # Check that num preds is equal num masks
     assert len(pred_paths) == len(mask_paths), f"There are not an equal amount of masks and preds {len(mask_paths)}, {len(pred_paths)}"
 
-    pred_paths = sorted(pred_paths)
-    mask_paths = sorted(mask_paths)
+    sorted(pred_paths)
+    sorted(mask_paths)
 
     iou_scores = 0
     biou_scores = 0
@@ -83,8 +83,12 @@ if __name__ == "__main__":
         iou_scores += iouscore
         biou_scores += biouscore
 
-    iscore = np.round(iou_scores / len(pred_paths), 4)
-    bscore = np.round(biou_scores / len(pred_paths), 4)
+    if len(pred_paths) > 0:
+        iscore = np.round(iou_scores / len(pred_paths), 4)
+        bscore = np.round(biou_scores / len(pred_paths), 4)
+    else:
+        print("Len of pred paths is not larger than 0")
+        raise ValueError
 
     if np.isnan(iscore):
         print("iou is nan")
