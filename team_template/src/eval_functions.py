@@ -12,10 +12,10 @@ def iou(prediction: np.array, target: np.array) -> float:
     overlap = prediction * target # Logical AND
     union = prediction + target # Logical OR
 
-    if union.sum() != 0:
-        iou = (float(overlap.sum()) / float(union.sum())) + 1e-7
+    if union.sum() != 0 and overlap.sum() != 0:
+        iou = (float(overlap.sum()) / float(union.sum()))
     else:
-        iou = 1e-7
+        iou = 0
 
     return iou
 
@@ -54,7 +54,7 @@ def biou(gt, dt, dilation_ratio=0.02):
     intersection = ((gt_boundary * dt_boundary) > 0).sum()
     union = ((gt_boundary + dt_boundary) > 0).sum()
     if union == 0 or intersection == 0:
-        boundary_iou = 1e-6
+        boundary_iou = 0
     else:
         boundary_iou = (intersection / union)
 
