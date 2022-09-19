@@ -61,8 +61,8 @@ if __name__ == "__main__":
     pred_paths = sorted(pred_paths)
     mask_paths = sorted(mask_paths)
 
-    iou_scores = np.ndarray((len(pred_paths),))
-    biou_scores = np.ndarray((len(mask_paths),))
+    iou_scores = 0
+    biou_scores = 0
 
     for i in range(len(pred_paths)):
 
@@ -80,13 +80,11 @@ if __name__ == "__main__":
         iouscore = iou(pred, mask)
         biouscore = biou(mask, pred)
 
-        iou_scores[i] = iouscore
-        biou_scores[i] = biouscore
+        iou_scores += iouscore
+        biou_scores += biouscore
 
-    print(iou_scores)
-    print(biou_scores)
-    iscore = np.round(iou_scores.sum()/len(iou_scores), 4)
-    bscore = np.round(biou_scores.sum()/len(biou_scores), 4)
+    iscore = np.round(iou_scores / len(pred_paths), 4)
+    bscore = np.round(biou_scores / len(pred_paths), 4)
 
     if np.isnan(iscore):
         print("iou is nan")
