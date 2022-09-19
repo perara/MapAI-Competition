@@ -83,8 +83,16 @@ if __name__ == "__main__":
         iou_scores[i] = iouscore
         biou_scores[i] = biouscore
 
-    iscore = np.round(iou_scores.mean(), 4)
-    bscore = np.round(biou_scores.mean(), 4)
+    iscore = np.round(iou_scores.sum()/len(iou_scores), 4)
+    bscore = np.round(biou_scores.sum()/len(biou_scores), 4)
+
+    if np.isnan(iscore):
+        print("iou is nan")
+        iscore = 0.0
+
+    if np.isnan(bscore):
+        print("biou is nan")
+        bscore = 0.0
 
     print(f"Evaluation {str(Path('../..').parent.absolute())} Task {args.task} -", "IoU:", iscore, "BIoU:", bscore)
 
