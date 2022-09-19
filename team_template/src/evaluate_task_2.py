@@ -67,8 +67,9 @@ if __name__ == "__main__":
     #    else:
     #        print("Exiting because you do not want to delete folder:", taskfolder)
     #        exit(0)
+
     shutil.rmtree(taskfolder)
-    os.mkdir(taskfolder)
+    os.makedirs(taskfolder)
 
     testloader = create_dataloader(opts, opts["dtype"])
 

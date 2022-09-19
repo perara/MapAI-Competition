@@ -58,15 +58,16 @@ if __name__ == "__main__":
     if not os.path.exists(submissionfolder):
         os.mkdir(submissionfolder)
 
-    if os.path.exists(taskfolder):
-        answer = input(f"Are you sure you want to delete folder: '{taskfolder}'? (y/n) ")
-        if answer == "y":
-            shutil.rmtree(taskfolder)
-        else:
-            print("Exiting because you do not want to delete folder:", taskfolder)
-            exit(0)
+    #if os.path.exists(taskfolder):
+    #    answer = input(f"Are you sure you want to delete folder: '{taskfolder}'? (y/n) ")
+    #    if answer == "y":
+    #        shutil.rmtree(taskfolder)
+    #    else:
+    #        print("Exiting because you do not want to delete folder:", taskfolder)
+    #        exit(0)
 
-    os.mkdir(taskfolder)
+    shutil.rmtree(taskfolder)
+    os.makedirs(taskfolder)
 
     testloader = create_dataloader(opts, opts["dtype"])
 
