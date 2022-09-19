@@ -9,6 +9,9 @@ from yaml import load, Loader, dump, Dumper
 from dataloader import create_dataloader
 from tqdm import tqdm
 from eval_functions import iou, biou
+import matplotlib.pyplot as plt
+
+import gdown
 
 import os
 import shutil
@@ -38,8 +41,17 @@ if __name__ == "__main__":
     new_conv1 = torch.nn.Conv2d(4, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
     model.backbone.conv1 = new_conv1
 
-    # Commented just for testing purposes
-    #model.load_state_dict(torch.load(opts["weights"]))
+    pt_share_link = "https://drive.google.com/file/d/10xBcdT3ryUFrhDs-g7ZourRuVjf-FHOj/view?usp=sharing"
+    pt_id = pt_share_link.split("/")[-2]
+
+    # Download trained model ready for inference
+    url_to_drive = f"https://drive.google.com/uc?id={pt_id}"
+    output_file = "pretrained_task2.pt"
+
+    gdown.download(url_to_drive, output_file, quiet=False)
+
+    # Commented for testing purposes
+    model.load_state_dict(torch.load(output_file))
 
     submissionfolder = "submission"
 
@@ -48,14 +60,14 @@ if __name__ == "__main__":
     if not os.path.exists(submissionfolder):
         os.mkdir(submissionfolder)
 
-    if os.path.exists(taskfolder):
-        answer = input(f"Are you sure you want to delete folder: '{taskfolder}'? (y/n) ")
-        if answer == "y":
-            shutil.rmtree(taskfolder)
-        else:
-            print("Exiting because you do not want to delete folder:", taskfolder)
-            exit(0)
-
+    #if os.path.exists(taskfolder):
+    #    answer = input(f"Are you sure you want to delete folder: '{taskfolder}'? (y/n) ")
+    #    if answer == "y":
+    #        shutil.rmtree(taskfolder)
+    #    else:
+    #        print("Exiting because you do not want to delete folder:", taskfolder)
+    #        exit(0)
+    shutil.rmtree(taskfolder)
     os.mkdir(taskfolder)
 
     testloader = create_dataloader(opts, opts["dtype"])
@@ -101,8 +113,22 @@ if __name__ == "__main__":
         for idx, value in enumerate(opts["classes"]):
             prediction_visual[prediction_visual == idx] = opts["class_to_color"][value]
 
+        image = image.squeeze().detach().numpy()[:3, :, :].transpose(1, 2, 0)
+
+        fig, ax = plt.subplots(1, 3)
+        columns = 3
+        rows = 1
+
+        ax[0].set_title("Input (RGB)")
+        ax[0].imshow(image)
+        ax[1].set_title("Prediction")
+        ax[1].imshow(prediction_visual)
+        ax[2].set_title("Label")
+        ax[2].imshow(label)
+
+        plt.savefig(filepath.split(".")[0] + ".png")
+
         cv.imwrite(filepath, prediction)
-        cv.imwrite(filepath.split(".")[0] + ".png", prediction_visual)
 
     print("iou_score:", np.round(iou_scores.mean(), 5), "biou_score:", np.round(biou_scores.mean(), 5))
 

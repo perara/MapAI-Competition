@@ -36,6 +36,8 @@ jobs:
           if [ ${{ github.event.release }} != "" ]; then
             echo "Private evaluation"
             for d in team_*/ ; do
+                python3 -m venv env
+                source env/bin/activate
                 pip3 install $d
                 python3 -c "from huggingface_hub.hf_api import HfFolder; HfFolder.save_token('$ACCESS_TOKEN')"
                 cd $d/src
@@ -44,12 +46,15 @@ jobs:
                 python3 evaluate_task_2.py --data_percentage $datapercentage --dtype task2
                 python3 evaluation.py --data_percentage $datapercentage --dtype task1 --task 1
                 python3 evaluation.py --data_percentage $datapercentage --dtype task2 --task 2
+                deactivate
                 echo Finished evaluation, exiting
                 cd ../..
             done
           else
             echo "Public evaluation"
             for d in team_*/ ; do
+                python3 -m venv env
+                source env/bin/activate
                 pip3 install $d
                 cd $d/src
                 echo " "
@@ -66,6 +71,7 @@ jobs:
                 python3 evaluation.py --data_percentage $datapercentage --dtype validation --task 2
                 git add results_task_*.json
                 echo " "
+                deactivate
                 echo Finished evaluation, exiting
                 cd ../..
             done

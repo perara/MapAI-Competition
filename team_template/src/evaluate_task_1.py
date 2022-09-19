@@ -9,6 +9,9 @@ from yaml import load, Loader, dump, Dumper
 from dataloader import create_dataloader
 from tqdm import tqdm
 from eval_functions import iou, biou
+import matplotlib.pyplot as plt
+
+import gdown
 
 import os
 import shutil
@@ -35,8 +38,18 @@ if __name__ == "__main__":
 
     model = torchvision.models.segmentation.fcn_resnet50(pretrained=False, num_classes=opts["num_classes"])
 
+    # Download trained model ready for inference
+    pt_share_link = "https://drive.google.com/file/d/1fh99McCvFoCcbhNFVh8W_iEoXBHj7aT1/view?usp=sharing"
+    pt_id = pt_share_link.split("/")[-2]
+
+    # Download trained model ready for inference
+    url_to_drive = f"https://drive.google.com/uc?id={pt_id}"
+    output_file = "pretrained_task1.pt"
+
+    gdown.download(url_to_drive, output_file, quiet=False)
+
     # Commented for testing purposes
-    #model.load_state_dict(torch.load(opts["weights"]))
+    model.load_state_dict(torch.load(output_file))
 
     submissionfolder = "submission"
 
@@ -68,6 +81,8 @@ if __name__ == "__main__":
     iou_scores = np.ndarray((len(testloader)))
     biou_scores = np.ndarray((len(testloader)))
 
+    model.eval()
+
     for idx, batch in tqdm(enumerate(testloader), total=len(testloader), desc="Inference", leave=False):
         image, label, filename = batch
         image = image.to(device)
@@ -98,7 +113,20 @@ if __name__ == "__main__":
         for idx, value in enumerate(opts["classes"]):
             prediction_visual[prediction_visual == idx] = opts["class_to_color"][value]
 
-        cv.imwrite(filepath, prediction)
+        image = image.squeeze().detach().numpy()[:3, :, :].transpose(1, 2, 0)
+
+        fig, ax = plt.subplots(1, 3)
+        columns = 3
+        rows = 1
+
+        ax[0].set_title("Input (RGB)")
+        ax[0].imshow(image)
+        ax[1].set_title("Prediction")
+        ax[1].imshow(prediction_visual)
+        ax[2].set_title("Label")
+        ax[2].imshow(label)
+
+        plt.savefig(filepath.split(".")[0] + ".png")
         cv.imwrite(filepath.split(".")[0] + ".png", prediction_visual)
 
     print("iou_score:", np.round(iou_scores.mean(), 5), "biou_score:", np.round(biou_scores.mean(), 5))

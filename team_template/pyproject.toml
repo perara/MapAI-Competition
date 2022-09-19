@@ -20,7 +20,9 @@ dependencies = [
     "datasets",
     "tomli",
     "pandas",
-    "pyarrow"
+    "pyarrow",
+    "gdown",
+    "matplotlib"
 ]
 dynamic = ["version", "readme"]
 

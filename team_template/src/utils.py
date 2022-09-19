@@ -1,4 +1,5 @@
 import os
+import glob
 import torch
 
 def create_run_dir(opts):
@@ -30,9 +31,12 @@ def create_run_dir(opts):
 
 
 
-def store_model_weights(opts: dict, model: torch.nn.Module, type: str):
+def store_model_weights(opts: dict, model: torch.nn.Module, type: str, epoch: int):
     rundir = opts["rundir"]
-    torch.save(model.state_dict(), os.path.join(rundir, f"{type}.pt"))
+    files = glob.glob(os.path.join(rundir, f"{type}_*.pt"))
+    for f in files:
+        os.remove(f)
+    torch.save(model.state_dict(), os.path.join(rundir, f"{type}_task{opts['task']}_{epoch}.pt"))
 
 def record_scores(opts, scoredict):
     rundir = opts["rundir"]

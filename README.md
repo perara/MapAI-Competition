@@ -155,6 +155,22 @@ When the deadline is finished, we will evaluate all of your code on the hidden t
 on a github page.
 
 
+### Uploading and downloading models from Huggingface
+
+As the .pt files for models can be rather large, we want you to upload the model files to
+your own google drive and download them from there during evaluation.
+
+1. Train a model and get the .pt file
+2. Upload the modelfile to a google drive folder
+3. Enable sharing with link (Which allows us to use gdown to download the modelfile)
+4. Get the link
+   * Most likely looking like: "https://drive.google.com/file/d/1wFHRUDe29a82fof1LNwFsFpOvX0StWL5/view?usp=sharing"
+   * Then just put the sharing link into the _pt_share_link_ variable in both evaluate_task_*.py files which will
+     get the id and put it into the correct format
+5. Test the modelfiles and check that it is correct and loads correctly
+6. During submission, ensure this works correctly by following the "Checklist before
+    submission" section
+
 ### Checklist before submission
 
 * Verify that, from inside the src folder, you can run the following commands:
@@ -167,4 +183,6 @@ on a github page.
   * Then go to the actions tab
   * Press the "Evaluation Pipeline"
   * Then press the "run workflow" for the branch you are testing (most likely master)
-  * Ensure the entire workflow runs without any issues (most likely environment issues here)
+  * Ensure the entire workflow runs without any issues (environment issues are common)
+    * If the environment issues are an issue, then you have to edit the pyproject.toml in
+      the base of your team folder

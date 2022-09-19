@@ -60,15 +60,9 @@ def train(opts):
 
 
     # The current model should be swapped with a different one of your choice
-    try:
-        model = torchvision.models.segmentation.fcn_resnet50(num_classes=opts["num_classes"],
-                                                             backbone_weights=torchvision.models.ResNet50_Weights.IMAGENET1K_V1)
-    except Exception as e:
-        model = torchvision.models.segmentation.fcn_resnet50(pretrained=True)
+    model = torchvision.models.segmentation.fcn_resnet50(pretrained=False, num_classes=opts["num_classes"])
 
     if opts["task"] == 2:
-        # Adds 4 channels to the input layer instead of 3
-        model = torchvision.models.segmentation.fcn_resnet50(pretrained=True)
         new_conv1 = torch.nn.Conv2d(4, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
         model.backbone.conv1 = new_conv1
 
@@ -129,9 +123,10 @@ def train(opts):
 
         if testscore > bestscore:
             bestscore = testscore
-            store_model_weights(opts, model, "best")
+            print("new best score:", bestscore, "- saving model weights")
+            store_model_weights(opts, model, f"best", epoch=e)
         else:
-            store_model_weights(opts, model, "last")
+            store_model_weights(opts, model, f"last", epoch=e)
 
 
         print("")
