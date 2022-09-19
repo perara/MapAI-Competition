@@ -6,61 +6,7 @@ import os
 import json
 from pathlib import Path
 
-
-def iou(prediction: np.array, target: np.array) -> float:
-    if prediction.dtype != bool:
-        prediction = np.asarray(prediction, dtype=bool)
-
-    if target.dtype != bool:
-        target = np.asarray(target, dtype=bool)
-
-    overlap = prediction * target # Logical AND
-    union = prediction + target # Logical OR
-
-    iou = float(overlap.sum()) / float(union.sum())
-
-    return iou
-
-# General util function to get the boundary of a binary mask.
-def _mask_to_boundary(mask, dilation_ratio=0.02):
-    """
-    Convert binary mask to boundary mask.
-    :param mask (numpy array, uint8): binary mask
-    :param dilation_ratio (float): ratio to calculate dilation = dilation_ratio * image_diagonal
-    :return: boundary mask (numpy array)
-    """
-    h, w = mask.shape
-    img_diag = np.sqrt(h ** 2 + w ** 2)
-    dilation = int(round(dilation_ratio * img_diag))
-    if dilation < 1:
-        dilation = 1
-    # Pad image so mask truncated by the image border is also considered as boundary.
-    new_mask = cv.copyMakeBorder(mask, 1, 1, 1, 1, cv.BORDER_CONSTANT, value=0)
-    kernel = np.ones((3, 3), dtype=np.uint8)
-    new_mask_erode = cv.erode(new_mask, kernel, iterations=dilation)
-    mask_erode = new_mask_erode[1 : h + 1, 1 : w + 1]
-    # G_d intersects G in the paper.
-    return mask - mask_erode
-
-
-def biou(gt, dt, dilation_ratio=0.02):
-    """
-    Compute boundary iou between two binary masks.
-    :param gt (numpy array, uint8): binary mask
-    :param dt (numpy array, uint8): binary mask
-    :param dilation_ratio (float): ratio to calculate dilation = dilation_ratio * image_diagonal
-    :return: boundary iou (float)
-    """
-    gt_boundary = _mask_to_boundary(gt, dilation_ratio)
-    dt_boundary = _mask_to_boundary(dt, dilation_ratio)
-    intersection = ((gt_boundary * dt_boundary) > 0).sum()
-    union = ((gt_boundary + dt_boundary) > 0).sum()
-    if union == 0 or intersection == 0:
-        boundary_iou = 1e-6
-    else:
-        boundary_iou = (intersection / union)
-
-    return boundary_iou
+from eval_functions import iou, biou
 
 def calculate_score(preds: np.array, tars: np.array) -> dict:
 
@@ -137,11 +83,14 @@ if __name__ == "__main__":
         iou_scores[i] = iouscore
         biou_scores[i] = biouscore
 
-    print(f"Evaluation {str(Path('../..').parent.absolute())} Task {args.task} -", "IoU:", np.round(iou_scores.mean(), 4), "BIoU:", np.round(biou_scores.mean(), 4))
+    iscore = np.round(iou_scores.mean(), 4)
+    bscore = np.round(biou_scores.mean(), 4)
+
+    print(f"Evaluation {str(Path('../..').parent.absolute())} Task {args.task} -", "IoU:", iscore, "BIoU:", bscore)
 
     result_file = f"results_task_{args.task}.json"
 
-    result_dict = {"iou": np.round(iou_scores.mean(), 4), "biou": np.round(biou_scores.mean(), 4)}
+    result_dict = {"iou": iscore, "biou": bscore}
 
     json.dump(result_dict, open(result_file, "w"))
 
