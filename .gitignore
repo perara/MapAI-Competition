@@ -129,6 +129,10 @@ dmypy.json
 .pyre/
 
 *.pt
-data/
-team_template/runs/
-*/submission
+data/train
+data/validation
+data/test
+data/task1_test
+data/task2_test
+submission/
+runs/

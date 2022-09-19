@@ -16,7 +16,9 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  evaluate:
+    env:
+      ACCESS_TOKEN: ${{ secrets.HF_EVAL_ACCESS_TOKEN }}
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -26,75 +28,62 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Triggering actor
-        run: |
-          echo "${{ github.triggering_actor }}"
-          echo "${{ github.repository_owner }}"
-
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJSON(github.event) }}
-        run: echo "$GITHUB_CONTEXT"
-
-      - name: Check if pull request
-        run: |
-          if [ -z ${{ github.event.pull_request }} ]; then
-            echo this is not a pull request
-          elif [ -z ${{ github.event.commit }} ]; then
-            echo this is not a commit
-          fi
-
-      - name: "Checkout private repo with PAT"
-        run: |
-          echo CLONING
-          if [ -z ${{ github.event.pull_request }} ]; then
-            echo PRIVATE CLONE
-            git clone https://${{ secrets.PAT_EVALUATION_DATA }}@github.com/Sjyhne/mapai_evaluation_data.git data
-          else
-            echo PUBLIC CLONE
-            git clone https://github.com/Sjyhne/mapai_validation_data.git data
-          fi
-
-      - name: "What is in my repo"
-        run: |
-          ls
-
-
       # Runs a set of commands using the runners shell
+      # If not field github.event.pull_request exists, then do first forloop
       - name: Evaluation
         run: |
-          if [ -z ${{ github.event.pull_request }} ]; then
-            for d in participant_*/ ; do
-                cp data/evaluation.py "$d"/.
-                cd $d
-                pip3 install -r requirements.txt
-                python3 evaluate_task_1.py --data_percentage 0.01 --dtype test
-                python3 evaluate_task_2.py --data_percentage 0.01 --dtype test
-                python3 evaluation.py --data_percentage 0.01 --dtype test --task 1
-                python3 evaluation.py --data_percentage 0.01 --dtype test --task 2
+          datapercentage=0.01
+          if [ ${{ github.event.release }} != "" ]; then
+            echo "Private evaluation"
+            for d in team_*/ ; do
+                python3 -m venv env
+                source env/bin/activate
+                pip3 install $d
+                python3 -c "from huggingface_hub.hf_api import HfFolder; HfFolder.save_token('$ACCESS_TOKEN')"
+                cd $d/src
+                echo $ACCESS_TOKEN | huggingface-cli login
+                python3 evaluate_task_1.py --data_percentage $datapercentage --dtype task1
+                python3 evaluate_task_2.py --data_percentage $datapercentage --dtype task2
+                python3 evaluation.py --data_percentage $datapercentage --dtype task1 --task 1
+                python3 evaluation.py --data_percentage $datapercentage --dtype task2 --task 2
+                deactivate
                 echo Finished evaluation, exiting
-                cd ..
+                cd ../..
             done
           else
-            for d in participant_*/ ; do
-                cp data/evaluation.py "$d"/.
-                echo have participant as substring - $d
-                cd $d
-                pip3 install -r requirements.txt
+            echo "Public evaluation"
+            for d in team_*/ ; do
+                python3 -m venv env
+                source env/bin/activate
+                pip3 install $d
+                cd $d/src
                 echo " "
                 echo -------------------
                 echo |Evaluating task 1|
                 echo -------------------
-                python3 evaluate_task_1.py --data_percentage 0.01 --dtype val
-                python3 evaluation.py --data_percentage 0.01 --dtype val --task 1
+                python3 evaluate_task_1.py --data_percentage $datapercentage --dtype validation
+                python3 evaluation.py --data_percentage $datapercentage --dtype validation --task 1
                 echo " "
                 echo -------------------
                 echo |Evaluating task 2|
                 echo -------------------
-                python3 evaluate_task_2.py --data_percentage 0.01 --dtype val
-                python3 evaluation.py --data_percentage 0.01 --dtype val --task 2
+                python3 evaluate_task_2.py --data_percentage $datapercentage --dtype validation
+                python3 evaluation.py --data_percentage $datapercentage --dtype validation --task 2
+                git add results_task_*.json
                 echo " "
+                deactivate
                 echo Finished evaluation, exiting
-                cd ..
+                cd ../..
             done
           fi
+
+      - name: Commit files
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "Adding result files generated during evaluation" -a
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.ADD_RESULTS_TOKEN }}
+          branch: ${{ github.ref }}

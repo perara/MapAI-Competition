@@ -9,6 +9,9 @@ from yaml import load, Loader, dump, Dumper
 from dataloader import create_dataloader
 from tqdm import tqdm
 from eval_functions import iou, biou
+import matplotlib.pyplot as plt
+
+import gdown
 
 import os
 import shutil
@@ -23,7 +26,7 @@ if __name__ == "__main__":
     parser.add_argument("--weights", type=str, help="Path to weights for the specific model and task")
     parser.add_argument("--test_data", type=str, help="Path to test data")
     parser.add_argument("--data_percentage", type=float, default=1.0, help="Percentage of the whole dataset that is used")
-    parser.add_argument("--dtype", type=str, default="val", help="Which data to test against")
+    parser.add_argument("--dtype", type=str, default="validation", help="Which data to test against")
 
     args = parser.parse_args()
 
@@ -38,8 +41,17 @@ if __name__ == "__main__":
     new_conv1 = torch.nn.Conv2d(4, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
     model.backbone.conv1 = new_conv1
 
-    # Commented just for testing purposes
-    #model.load_state_dict(torch.load(opts["weights"]))
+    pt_share_link = "https://drive.google.com/file/d/10xBcdT3ryUFrhDs-g7ZourRuVjf-FHOj/view?usp=sharing"
+    pt_id = pt_share_link.split("/")[-2]
+
+    # Download trained model ready for inference
+    url_to_drive = f"https://drive.google.com/uc?id={pt_id}"
+    output_file = "pretrained_task2.pt"
+
+    gdown.download(url_to_drive, output_file, quiet=False)
+
+    # Commented for testing purposes
+    model.load_state_dict(torch.load(output_file))
 
     submissionfolder = "submission"
 
@@ -48,15 +60,16 @@ if __name__ == "__main__":
     if not os.path.exists(submissionfolder):
         os.mkdir(submissionfolder)
 
-    if os.path.exists(taskfolder):
-        answer = input(f"Are you sure you want to delete folder: '{taskfolder}'? (y/n) ")
-        if answer == "y":
-            shutil.rmtree(taskfolder)
-        else:
-            print("Exiting because you do not want to delete folder:", taskfolder)
-            exit(0)
+    #if os.path.exists(taskfolder):
+    #    answer = input(f"Are you sure you want to delete folder: '{taskfolder}'? (y/n) ")
+    #    if answer == "y":
+    #        shutil.rmtree(taskfolder)
+    #    else:
+    #        print("Exiting because you do not want to delete folder:", taskfolder)
+    #        exit(0)
 
-    os.mkdir(taskfolder)
+    shutil.rmtree(taskfolder)
+    os.makedirs(taskfolder)
 
     testloader = create_dataloader(opts, opts["dtype"])
 
@@ -71,7 +84,7 @@ if __name__ == "__main__":
     iou_scores = np.ndarray((len(testloader)))
     biou_scores = np.ndarray((len(testloader)))
 
-    for idx, batch in tqdm(enumerate(testloader), total=len(testloader), desc="Inference"):
+    for idx, batch in tqdm(enumerate(testloader), total=len(testloader), desc="Inference", leave=False):
         image, label, filename = batch
         image = image.to(device)
         label = label.to(device)
@@ -86,6 +99,8 @@ if __name__ == "__main__":
         prediction = np.uint8(prediction)
         label = np.uint8(label)
 
+        assert prediction.shape == label.shape, f"Prediction and label shape is not same, pls fix [{prediction.shape} - {label.shape}]"
+
         iou_score = iou(prediction, label)
         biou_score = biou(label, prediction)
 
@@ -94,8 +109,25 @@ if __name__ == "__main__":
 
         filepath = os.path.join(predictionfolder, filename)
 
+        prediction_visual = np.copy(prediction)
+
         for idx, value in enumerate(opts["classes"]):
-            prediction[prediction == idx] = opts["class_to_color"][value]
+            prediction_visual[prediction_visual == idx] = opts["class_to_color"][value]
+
+        image = image.squeeze().detach().numpy()[:3, :, :].transpose(1, 2, 0)
+
+        fig, ax = plt.subplots(1, 3)
+        columns = 3
+        rows = 1
+
+        ax[0].set_title("Input (RGB)")
+        ax[0].imshow(image)
+        ax[1].set_title("Prediction")
+        ax[1].imshow(prediction_visual)
+        ax[2].set_title("Label")
+        ax[2].imshow(label)
+
+        plt.savefig(filepath.split(".")[0] + ".png")
 
         cv.imwrite(filepath, prediction)
 

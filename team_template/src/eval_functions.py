@@ -12,7 +12,10 @@ def iou(prediction: np.array, target: np.array) -> float:
     overlap = prediction * target # Logical AND
     union = prediction + target # Logical OR
 
-    iou = float(overlap.sum()) / float(union.sum())
+    if union.sum() != 0:
+        iou = (float(overlap.sum()) / float(union.sum())) + 1e-7
+    else:
+        iou = 1e-7
 
     return iou
 
