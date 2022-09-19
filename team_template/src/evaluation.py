@@ -62,7 +62,7 @@ if __name__ == "__main__":
     mask_paths = sorted(mask_paths)
 
     iou_scores = np.ndarray((len(pred_paths),))
-    biou_scores = np.ndarray((len(pred_paths),))
+    biou_scores = np.ndarray((len(mask_paths),))
 
     for i in range(len(pred_paths)):
 
@@ -83,6 +83,8 @@ if __name__ == "__main__":
         iou_scores[i] = iouscore
         biou_scores[i] = biouscore
 
+    print(iou_scores)
+    print(biou_scores)
     iscore = np.round(iou_scores.sum()/len(iou_scores), 4)
     bscore = np.round(biou_scores.sum()/len(biou_scores), 4)
 
