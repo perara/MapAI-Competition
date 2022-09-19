@@ -44,6 +44,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     sf = os.path.join("submission", "task" + str(args.task), "predictions")
+
     if args.dtype != "validation":
         lf = os.path.join(f"../../data/task{args.task}_test/", "masks")
     else:
@@ -51,6 +52,11 @@ if __name__ == "__main__":
 
     pred_files = os.listdir(sf)
     mask_files = os.listdir(lf)
+
+    print("sf:", sf, "lf:", lf)
+
+    print("pred_files:", pred_files)
+    print("mask_files:", mask_files)
 
     pred_paths = [os.path.join(sf, x) for x in os.listdir(sf) if x.split(".")[-1] == "tif"]
     mask_paths = [os.path.join(lf, x.split("/")[-1]) for x in pred_paths]
