@@ -126,7 +126,7 @@ if __name__ == "__main__":
         ax[2].imshow(label)
 
         plt.savefig(filepath.split(".")[0] + ".png")
-        cv.imwrite(filepath.split(".")[0] + ".png", prediction_visual)
+        cv.imwrite(filepath, prediction)
 
     print("iou_score:", np.round(iou_scores.mean(), 5), "biou_score:", np.round(biou_scores.mean(), 5))
 
