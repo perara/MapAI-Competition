@@ -55,9 +55,6 @@ if __name__ == "__main__":
 
     taskfolder = os.path.join(submissionfolder, "task" + str(opts["task"]))
 
-    if not os.path.exists(submissionfolder):
-        os.mkdir(submissionfolder)
-
     #if os.path.exists(taskfolder):
     #    answer = input(f"Are you sure you want to delete folder: '{taskfolder}'? (y/n) ")
     #    if answer == "y":
@@ -67,7 +64,7 @@ if __name__ == "__main__":
     #        exit(0)
 
     if os.path.exists(submissionfolder):
-        shutil.rmtree(taskfolder)
+        shutil.rmtree(submissionfolder)
     os.makedirs(taskfolder)
 
     testloader = create_dataloader(opts, opts["dtype"])
