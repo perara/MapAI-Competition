@@ -39,7 +39,7 @@ if __name__ == "__main__":
     model = torchvision.models.segmentation.fcn_resnet50(pretrained=False, num_classes=opts["num_classes"])
 
     # Download trained model ready for inference
-    pt_share_link = "https://drive.google.com/file/d/1fh99McCvFoCcbhNFVh8W_iEoXBHj7aT1/view?usp=sharing"
+    pt_share_link = "https://drive.google.com/file/d/17YB5-KZVW-mqaQdz4xv7rioDr4DzhfOU/view?usp=sharing"
     pt_id = pt_share_link.split("/")[-2]
 
     # Download trained model ready for inference
