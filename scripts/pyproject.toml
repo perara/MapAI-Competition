@@ -23,7 +23,6 @@ dependencies = [
     "pyarrow",
     "gdown",
     "matplotlib",
-    "pyenv"
 ]
 dynamic = ["readme"]
 
