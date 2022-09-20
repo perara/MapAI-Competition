@@ -10,6 +10,10 @@ competitions using Github and Huggingface. This is the first competition we are 
 the framework, and therefore appreciate your feedback and will be available for questions.
 If there is a question or something is wrong, please raise a issue regarding the question.
 
+The competition is sponsored by AI:Hub and The Norwegian Mapping Authority
+
+\insert logos
+
 ## Competition Information
 
 The competition aims at building segmentation using aerial images and lidar data. The 
