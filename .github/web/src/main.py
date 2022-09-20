@@ -3,13 +3,14 @@ import json
 
 import jinja2
 from jinja2 import FileSystemLoader
+import markdown
 import pathlib
 from pydantic import BaseModel
 import tomli
 import os
+import urllib.request
 
 base_dir = pathlib.Path(__file__).parent
-
 
 class Participant(BaseModel):
     name: str = None
@@ -105,9 +106,17 @@ if __name__ == "__main__":
     # Sort participants based on score
     participants.sort(key=lambda x: x.score, reverse=True)
 
+    #
+    readme_data = urllib.request.urlopen("https://raw.githubusercontent.com/Sjyhne/MapAI-Competition/master/README.md").read().decode()
+
     environment = jinja2.Environment(loader=FileSystemLoader(base_dir.joinpath("templates/")))
+
     template = environment.get_template("index.html")
-    render = template.render(participants=participants, competition_title=args.competition_title)
+    render = template.render(
+        participants=participants,
+        competition_title=args.competition_title,
+        readme_data=markdown.markdown(readme_data)
+    )
 
     outfile = pathlib.Path(args.out)
     outfile.mkdir(exist_ok=True)
