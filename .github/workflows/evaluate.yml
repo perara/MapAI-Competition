@@ -29,10 +29,10 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install ubuntu dependencies
-        run: sudo apt-get update && sudo apt-get install -y python3-pip ffmpeg libsm6 libxext6
+        run: sudo apt-get update && sudo apt-get install -y python3-pip  python3.8-venv  ffmpeg libsm6 libxext6
 
-      - name: Install Pyenv
-        run: curl https://pyenv.run | bash
+      #- name: Install Pyenv
+      #  run: curl https://pyenv.run | bash
 
       # Install python packages that are required.
       - name: Install Python Global Dependencies
@@ -50,35 +50,50 @@ jobs:
           # Variables
           datapercentage=0.01
           
+          if [ -z ${{ github.event.release }} ]; then
+              # validation data (on public data)
+              data_type=validation
+            else
+              # test data(on private data, competition submission)
+              echo $ACCESS_TOKEN | huggingface-cli login
+              data_type=test         
+          fi
+          
+          # Create artifacts_path
+          artifacts_path="/tmp/mapai-result-artifacts"
+          rm -rf $artifacts_path
+          mkdir -p $artifacts_path
+          
           for team in team_*/ ; do
             # Set-up python environment
-            pyenv_exec=$(python3 .github/scripts/version_extractor.py --config $team/pyproject.toml)
+            pyenv_exec=$(python3 scripts/mapai_toolkit/version_extractor.py --config $team/pyproject.toml)
             eval "$pyenv_exec -m venv env"
-            source env/bin/activate
+            #python3 -m venv env
+            #source env/bin/activate
             
             # Install team dependencies
             pip3 install $team
-          
+            
+            # Install mapai_toolkit
+            pip3 install scripts/
+                      
+            # Create submission directory (temporary)
+            submission_path="/tmp/MapAI-$team-submission"
+            rm -rf $submission_path
+            mkdir -p submission_path
+                    
             # Enter team directory
             cd $team/src
           
-          
-            if [ -z ${{ github.event.release }} ]; then
-              # Validation tests (on public data)
-              python3 evaluate_task_1.py --data_percentage $datapercentage --dtype validation
-              python3 evaluation.py --data_percentage $datapercentage --dtype validation --task 1
-              python3 evaluate_task_2.py --data_percentage $datapercentage --dtype validation
-              python3 evaluation.py --data_percentage $datapercentage --dtype validation --task 2
-            else
-              # Validation tests (on private data, competition submission)
-              echo $ACCESS_TOKEN | huggingface-cli login
-              python3 evaluate_task_1.py --data_percentage $datapercentage --dtype task1
-              python3 evaluate_task_2.py --data_percentage $datapercentage --dtype task2
-              python3 evaluation.py --data_percentage $datapercentage --dtype task1 --task 1
-              python3 evaluation.py --data_percentage $datapercentage --dtype task2 --task 2
-              git add results_task_*.json
-            fi
-            
+            # RUN both tasks
+            for task in 1 2; do
+              # RUN participant code
+              python3 main.py --data-ratio $datapercentage --data-type validation --submission-path $submission_path --task $task
+              
+              # RUN evaluation code
+              python3 ../../scripts/mapai_toolkit/evaluation.py --task $task --data-ratio $datapercentage --submission-path $submission_path --team $team --data-type $data_type
+            done
+
             # Deactivate virtual env
             deactivate
           
@@ -86,6 +101,13 @@ jobs:
             cd ../..
 
           done
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-without-markdown
+          path: |
+            /tmp/mapai-result-artifacts/*.json
 
       - name: Commit files
         run: |
