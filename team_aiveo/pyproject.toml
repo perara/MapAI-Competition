@@ -4,7 +4,6 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "team-aiveo"
-github_name = "dummy"
 description = "Configuring the environment for running python and ML"
 requires-python = ">=3.7"
 keywords = []
