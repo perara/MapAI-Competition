@@ -44,11 +44,11 @@ jobs:
 
       - name: Where are you files
         run: |
-            ls
+            ls evaluation_results
 
       - name: Build with Python and Jinja2
         # Outputs to the './_site' directory by default
-        run: python3 web/src/main.py --out "./_site" --competition-title "NORA Map Competition" --prefix "team"
+        run: python3 web/src/main.py --out "./_site" --competition-title "NORA MapAI-Competition" --prefix "team"
 
       - name: Setup Pages
         id: pages

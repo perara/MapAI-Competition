@@ -64,7 +64,8 @@ def parse_participant(participant_path: pathlib.Path):
     property_exists(participant_config["project"], "requires-python")
 
     try:
-        task1 = json.load(open(os.path.join(participant_path,"src/results_task_1.json"), "r"))
+        print("participant_path:", participant_path)
+        task1 = json.load(open(os.path.join("evaluation_results", str(participant_path) + "_task_1.json"), "r"))
         task1iou = task1["iou"]
         task1biou = task1["biou"]
     except Exception as e:
@@ -72,7 +73,7 @@ def parse_participant(participant_path: pathlib.Path):
         task1biou = 0.0
 
     try:
-        task2 = json.load(open(os.path.join(participant_path,"src/results_task_2.json"), "r"))
+        task2 = json.load(open(os.path.join("evaluation_results", str(participant_path) + "_task_2.json"), "r"))
         task2iou = task2["iou"]
         task2biou = task2["biou"]
     except Exception as e:
