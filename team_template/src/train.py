@@ -12,10 +12,11 @@ import time
 
 from dataloader import create_dataloader
 from utils import create_run_dir, store_model_weights, record_scores
+
 from eval_functions import calculate_score
 
-def test(opts, dataloader, model, lossfn):
 
+def test(opts, dataloader, model, lossfn):
     model.eval()
 
     device = opts["device"]
@@ -24,7 +25,6 @@ def test(opts, dataloader, model, lossfn):
     ioutotal = np.zeros((len(dataloader)), dtype=float)
     bioutotal = np.zeros((len(dataloader)), dtype=float)
     scoretotal = np.zeros((len(dataloader)), dtype=float)
-
 
     for idx, batch in tqdm(enumerate(dataloader), leave=False, total=len(dataloader), desc="Test"):
         image, label, filename = batch
@@ -37,10 +37,11 @@ def test(opts, dataloader, model, lossfn):
 
         output = torch.argmax(torch.softmax(output, dim=1), dim=1)
         if device != "cpu":
-            metrics = calculate_score(output.detach().cpu().numpy().astype(np.uint8), label.detach().cpu().numpy().astype(np.uint8))
+            metrics = calculate_score(output.detach().cpu().numpy().astype(np.uint8),
+                                      label.detach().cpu().numpy().astype(np.uint8))
         else:
             metrics = calculate_score(output.detach().numpy().astype(np.uint8), label.detach().numpy().astype(np.uint8))
-            
+
         losstotal[idx] = loss
         ioutotal[idx] = metrics["iou"]
         bioutotal[idx] = metrics["biou"]
@@ -53,11 +54,9 @@ def test(opts, dataloader, model, lossfn):
 
     return loss, iou, biou, score
 
+
 def train(opts):
-
     device = opts["device"]
-
-
 
     # The current model should be swapped with a different one of your choice
     model = torchvision.models.segmentation.fcn_resnet50(pretrained=False, num_classes=opts["num_classes"])
@@ -106,10 +105,12 @@ def train(opts):
             lossitem = loss.item()
             output = torch.argmax(torch.softmax(output, dim=1), dim=1)
             if device != "cpu":
-                trainmetrics = calculate_score(output.detach().cpu().numpy().astype(np.uint8), label.detach().cpu().numpy().astype(np.uint8))
+                trainmetrics = calculate_score(output.detach().cpu().numpy().astype(np.uint8),
+                                               label.detach().cpu().numpy().astype(np.uint8))
             else:
-                trainmetrics = calculate_score(output.detach().numpy().astype(np.uint8), label.detach().numpy().astype(np.uint8))
-            
+                trainmetrics = calculate_score(output.detach().numpy().astype(np.uint8),
+                                               label.detach().numpy().astype(np.uint8))
+
             losstotal[idx] = lossitem
             ioutotal[idx] = trainmetrics["iou"]
             bioutotal[idx] = trainmetrics["biou"]
@@ -128,9 +129,10 @@ def train(opts):
         else:
             store_model_weights(opts, model, f"last", epoch=e)
 
-
         print("")
-        print(tabulate([["train", trainloss, trainiou, trainbiou, trainscore], ["test", testloss, testiou, testbiou, testscore]], headers=["Type", "Loss", "IoU", "BIoU", "Score"]))
+        print(tabulate(
+            [["train", trainloss, trainiou, trainbiou, trainscore], ["test", testloss, testiou, testbiou, testscore]],
+            headers=["Type", "Loss", "IoU", "BIoU", "Score"]))
 
         scoredict = {
             "epoch": e,
@@ -156,7 +158,8 @@ if __name__ == "__main__":
     parser.add_argument("--config", type=str, default="config/data.yaml", help="Configuration file to be used")
     parser.add_argument("--device", type=str, default="cpu")
     parser.add_argument("--task", type=int, default=1)
-    parser.add_argument("--data_percentage", type=float, default=1.0, help="Percentage of the whole dataset that is used")
+    parser.add_argument("--data_percentage", type=float, default=1.0,
+                        help="Percentage of the whole dataset that is used")
 
     args = parser.parse_args()
 
@@ -176,4 +179,3 @@ if __name__ == "__main__":
     dump(opts, open(os.path.join(rundir, "opts.yaml"), "w"), Dumper)
 
     train(opts)
-
