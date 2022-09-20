@@ -102,7 +102,8 @@ if __name__ == "__main__":
 
     participants = get_participants(args.prefix)
 
-    print("participants:", participants)
+    # Sort participants based on score
+    participants.sort(key=lambda x: x.score, reverse=True)
 
     environment = jinja2.Environment(loader=FileSystemLoader(base_dir.joinpath("templates/")))
     template = environment.get_template("index.html")
