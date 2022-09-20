@@ -45,17 +45,6 @@ from rural to urban locations. The diversity poses a vital requirement for the m
 generalize to the various combinations. These hardships motivate the competition and our 
 evaluation method.
 
-### Rules
-
-Below is a set of rules that is necessary to follow in order to not be disqualified
-
-* You are not allowed to alter the training and validation splits - they must stay as is.
-* You are not allowed to use other training data than what is provided through the project 
-(However, pretrained models are allowed).
-* You are encouraged to create teams, but submissions must come from the same fork.
-* You are not allowed to alter the evaluation.py file.
-* evaluate_task_*.py can only be altered in such a fashion that it is able to run your model.
-
 ### Registration
 
 Forking the base repository is part of the registration process. However, we would also like you to register your information
@@ -63,7 +52,7 @@ in a Google forms. The main reason comes from the ability to reach out to the pa
 As mentioned earlier, the competition framework is piloting with this competition, and therefore it will be more
 prone to change compared to more established competition frameworks.
 
-[Google form]()
+[Google form](https://docs.google.com/forms/d/1sJ9R2j32dc7TUDDkVCpLsaIVBcxRcOLiwmqeq-15O5E/edit)
 
 ## Instructions
 
@@ -155,7 +144,9 @@ When the deadline is finished, we will evaluate all of your code on the hidden t
 on a github page.
 
 
-### Uploading and downloading models from Huggingface
+### Uploading and downloading models from drive.google.com
+
+_This is optional, and we're satisfied as long as the models are downloaded and loaded through the script_
 
 As the .pt files for models can be rather large, we want you to upload the model files to
 your own google drive and download them from there during evaluation.
