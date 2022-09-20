@@ -1,9 +1,8 @@
 # MapAI Competition
 
 This is the official repository for the MapAI competition arranged by 
-The Norwegian Mapping Authority, University of Agder (UiA),
-Norwegian Artificial Intelligence Research Consortium (NORA), 
-AI:Hub, and Norkart.
+The Norwegian Mapping Authority, Centre for Artificial Intelligence Research at University of Agder (CAIR),
+Norwegian Artificial Intelligence Research Consortium (NORA), AI:Hub, and Norkart.
 
 For this competition we are testing a new competition-framework/template for arranging 
 competitions using Github and Huggingface. This is the first competition we are arranging with
@@ -57,6 +56,13 @@ As mentioned earlier, the competition framework is piloting with this competitio
 prone to change compared to more established competition frameworks.
 
 [Google form](https://docs.google.com/forms/d/1sJ9R2j32dc7TUDDkVCpLsaIVBcxRcOLiwmqeq-15O5E/edit)
+
+### Prizes
+
+There will be two prizes, where the first place receives 1500 Euro and second place receives 500 Euro.
+
+1. 1500 Euro
+2. 500 Euro
 
 ## Instructions
 
@@ -168,11 +174,6 @@ your own google drive and download them from there during evaluation.
 
 ### Checklist before submission
 
-* Verify that, from inside the src folder, you can run the following commands:
-  * `python3 evaluate_task_1.py --dtype validation --device cuda:0/cpu`
-  * `python3 evaluate_task_2.py --dtype validation --device cuda:0/cpu`
-  * `python3 evaluation.py --task 1 --dtype validation --device cuda:0/cpu`
-  * `python3 evaluation.py --task 2 --dtype validation --device cuda:0/cpu`
 * Verify that you are able to run the evaluation pipeline
   * To do this you can go to your own repository.
   * Then go to the actions tab
