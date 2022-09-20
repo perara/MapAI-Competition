@@ -36,6 +36,16 @@ jobs:
       - name: Install dependencies
         run: python3 -m pip install web/
 
+      - name: Download artifact
+        id: download-artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: evaluate.yml
+
+      - name: Where are you files
+        run: |
+            ls
+
       - name: Build with Python and Jinja2
         # Outputs to the './_site' directory by default
         run: python3 web/src/main.py --out "./_site" --competition-title "NORA Map Competition" --prefix "team"
