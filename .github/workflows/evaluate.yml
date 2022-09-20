@@ -31,8 +31,8 @@ jobs:
       - name: Install ubuntu dependencies
         run: sudo apt-get update && sudo apt-get install -y python3-pip  python3.8-venv  ffmpeg libsm6 libxext6
 
-      #- name: Install Pyenv
-      #  run: curl https://pyenv.run | bash
+      - name: Install Pyenv
+        run: curl https://pyenv.run | bash
 
       # Install python packages that are required.
       - name: Install Python Global Dependencies
