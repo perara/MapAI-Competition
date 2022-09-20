@@ -102,6 +102,8 @@ if __name__ == "__main__":
 
     participants = get_participants(args.prefix)
 
+    print("participants:", participants)
+
     environment = jinja2.Environment(loader=FileSystemLoader(base_dir.joinpath("templates/")))
     template = environment.get_template("index.html")
     render = template.render(participants=participants, competition_title=args.competition_title)
