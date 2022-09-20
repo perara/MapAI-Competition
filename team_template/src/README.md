@@ -5,12 +5,7 @@ of practical functionality for the competition.
 
 ## Important
 
-Do not alter the `evaluation.py` file - this file is only used during evaluation on our servers
-and altering this file will cause the tests to fail.
 
-For the `evaluate_task_*.py` files you must alter them in such a manner that it is able to load
-the trained weights for your model. It is important that storing the predictions is done in
-the same manner as original.
 
 ## pyproject.toml
 
@@ -21,7 +16,7 @@ to the needs of your project.
 There are especially a few fields that is of interest for you:
 
 * project.name
-  * Fill out the teamname with '-' as spaces
+  * Fill out the teamname with '-' as spaces (Try to find a unique name)
 * project.requires-python
   * Please specify the version of python that is needed
     to run your project. E.g. `==3.8` etc.

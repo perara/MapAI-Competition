@@ -112,8 +112,6 @@ def main(args):
 
 
         fig, ax = plt.subplots(1, 3)
-        columns = 3
-        rows = 1
         ax[0].set_title("Input (RGB)")
         ax[0].imshow(image)
         ax[1].set_title("Prediction")
