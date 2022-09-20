@@ -1,14 +1,17 @@
 # MapAI Competition
 
 This is the official repository for the MapAI competition arranged by 
-The Norwegian Mapping Authority, University of Agder (UiA),
-Norwegian Artificial Intelligence Research Consortium (NORA), 
-AI:Hub, and Norkart.
+The Norwegian Mapping Authority, Centre for Artificial Intelligence Research at University of Agder (CAIR),
+Norwegian Artificial Intelligence Research Consortium (NORA), AI:Hub, and Norkart.
 
 For this competition we are testing a new competition-framework/template for arranging 
 competitions using Github and Huggingface. This is the first competition we are arranging with
 the framework, and therefore appreciate your feedback and will be available for questions.
 If there is a question or something is wrong, please raise a issue regarding the question.
+
+The competition is sponsored by AI:Hub and The Norwegian Mapping Authority
+
+\insert logos
 
 ## Competition Information
 
@@ -45,17 +48,6 @@ from rural to urban locations. The diversity poses a vital requirement for the m
 generalize to the various combinations. These hardships motivate the competition and our 
 evaluation method.
 
-### Rules
-
-Below is a set of rules that is necessary to follow in order to not be disqualified
-
-* You are not allowed to alter the training and validation splits - they must stay as is.
-* You are not allowed to use other training data than what is provided through the project 
-(However, pretrained models are allowed).
-* You are encouraged to create teams, but submissions must come from the same fork.
-* You are not allowed to alter the evaluation.py file.
-* evaluate_task_*.py can only be altered in such a fashion that it is able to run your model.
-
 ### Registration
 
 Forking the base repository is part of the registration process. However, we would also like you to register your information
@@ -63,7 +55,14 @@ in a Google forms. The main reason comes from the ability to reach out to the pa
 As mentioned earlier, the competition framework is piloting with this competition, and therefore it will be more
 prone to change compared to more established competition frameworks.
 
-[Google form]()
+[Google form](https://docs.google.com/forms/d/1sJ9R2j32dc7TUDDkVCpLsaIVBcxRcOLiwmqeq-15O5E/edit)
+
+### Prizes
+
+There will be two prizes, where the first place receives 1500 Euro and second place receives 500 Euro.
+
+1. 1500 Euro
+2. 500 Euro
 
 ## Instructions
 
@@ -155,7 +154,9 @@ When the deadline is finished, we will evaluate all of your code on the hidden t
 on a github page.
 
 
-### Uploading and downloading models from Huggingface
+### Uploading and downloading models from drive.google.com
+
+_This is optional, and we're satisfied as long as the models are downloaded and loaded through the script_
 
 As the .pt files for models can be rather large, we want you to upload the model files to
 your own google drive and download them from there during evaluation.
@@ -173,11 +174,6 @@ your own google drive and download them from there during evaluation.
 
 ### Checklist before submission
 
-* Verify that, from inside the src folder, you can run the following commands:
-  * `python3 evaluate_task_1.py --dtype validation --device cuda:0/cpu`
-  * `python3 evaluate_task_2.py --dtype validation --device cuda:0/cpu`
-  * `python3 evaluation.py --task 1 --dtype validation --device cuda:0/cpu`
-  * `python3 evaluation.py --task 2 --dtype validation --device cuda:0/cpu`
 * Verify that you are able to run the evaluation pipeline
   * To do this you can go to your own repository.
   * Then go to the actions tab

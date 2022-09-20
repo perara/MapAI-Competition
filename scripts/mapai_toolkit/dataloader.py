@@ -79,8 +79,6 @@ class ImageAndLabelDataset(Dataset):
 
         self.paths = download_dataset(data_type=datatype, task=opts["task"], get_dataset=True)
 
-
-
         print()
 
         print(

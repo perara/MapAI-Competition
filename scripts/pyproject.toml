@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "mapai-toolkit"
+name = "mapai_toolkit"
 version = "1.0.0"
 description = "The MapAI Competition SDK"
 keywords = []
@@ -31,7 +31,7 @@ readme = {file = ["README.rst"]}
 
 [tool.setuptools.packages.find]
 where = ["."]  # list of folders that contain the packages (["."] by default)
-include = ["mapai_toolkit"]  # package names should match these glob patterns (["*"] by default)
+include = ["*"]  # package names should match these glob patterns (["*"] by default)
 exclude = [
     "node_modules*",
     "scripts*",

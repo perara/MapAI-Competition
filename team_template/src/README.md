@@ -2,7 +2,6 @@
 
 
 ## Important
-
 Do not alter the sections in `main.py` that reads `DO NOT EDIT`. You should only include your code in the `CODE GOES HERE` section, as illustrated in the example code.
 Your code should output submission to the `args.submission_path` location.
 
@@ -15,7 +14,7 @@ to the needs of your project.
 There are especially a few fields that is of interest for you:
 
 * project.name
-  * Fill out the teamname with '-' as spaces
+  * Fill out the teamname with '-' as spaces (Try to find a unique name)
 * project.requires-python
   * Please specify the version of python that is needed
     to run your project. E.g. `==3.8` etc.
